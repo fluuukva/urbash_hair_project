@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Работа с нами | URBASH.hair</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/header_banner.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/work-with-us.css">
+    <link rel="stylesheet" href="css/modal_appointment.css">
+    <link rel="stylesheet" href="css/errors.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #131313; color: #fff; }
+        .work-with-us { max-width: 1200px; margin: 120px auto 60px; padding: 0 20px; }
+        .work-with-us h1 { font-family: 'Playfair Display', serif; font-size: 48px; color: #FFD700; text-align: center; margin-bottom: 50px; }
+        .work-with-us h2 { font-family: 'Playfair Display', serif; font-size: 32px; color: #D0B004; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 215, 0, 0.3); padding-bottom: 15px; }
+        .section { margin-bottom: 60px; }
+        .price-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
+        .price-item { background-color: #1a1a1a; border: 1px solid rgba(255, 215, 0, 0.1); border-radius: 10px; padding: 25px; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .price-item:hover { transform: translateY(-5px); border-color: #D0B004; }
+        .price-item h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #FFD700; margin-bottom: 15px; }
+        .price-item p { font-family: 'Montserrat', sans-serif; color: #e0e0e0; line-height: 1.6; margin-bottom: 15px; }
+        .price-item ul { list-style: none; padding: 0; margin-bottom: 20px; }
+        .price-item li { font-family: 'Montserrat', sans-serif; color: #ccc; padding: 5px 0; position: relative; padding-left: 20px; }
+        .price-item li:before { content: "•"; color: #D0B004; font-size: 18px; position: absolute; left: 0; }
+        .price-item .price { font-size: 24px; font-weight: 700; color: #FFD700; text-align: right; border-top: 1px solid rgba(255, 215, 0, 0.2); padding-top: 15px; margin-bottom: 0; }
+        #application-form { background-color: #1a1a1a; border: 1px solid rgba(255, 215, 0, 0.1); border-radius: 10px; padding: 40px; max-width: 800px; margin: 0 auto; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-family: 'Montserrat', sans-serif; font-weight: 500; color: #FFD700; margin-bottom: 10px; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"], .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; background-color: #2a2a2a; border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 5px; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 16px; transition: border-color 0.3s ease; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #D0B004; }
+        .radio-group { display: flex; flex-direction: column; gap: 10px; }
+        .radio-group input[type="radio"] { margin-right: 10px; accent-color: #D0B004; }
+        .radio-group label { display: inline-block; color: #e0e0e0; margin-bottom: 0; }
+        .submit-button { display: block; width: 100%; padding: 16px; background-color: #C9A657; color: #131313; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
+        .submit-button:hover { background-color: #D0B004; }
+        .success-message { display: none; background-color: rgba(208, 176, 4, 0.2); border: 1px solid #D0B004; border-radius: 5px; padding: 15px; margin-top: 20px; color: #FFD700; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .success-message.show { display: block; }
+        @media (max-width: 768px) { .work-with-us h1 { font-size: 36px; } .work-with-us h2 { font-size: 28px; } #application-form { padding: 20px; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header__inner">
+            <a href="main.html" class="logo">URBASH.hair</a>
+            <div class="main-nav" id="main-nav">
+                <ul class="nav-list">
+                    <li class="menu-item-has-children"><a href="#">Главная <span class="arrow">▼</span></a>
+                        <ul class="sub-menu">
+                            <li><a href="main.html#about-us">О нас</a></li>
+                            <li><a href="main.html#masters">Мастера</a></li>
+                            <li><a href="main.html#price-services">Прайс/услуги</a></li>
+                            <li><a href="main.html#gallery">Галерея</a></li>
+                            <li><a href="main.html#reviews">Отзывы</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children"><a href="#">Работа с нами <span class="arrow">▼</span></a>
+                        <ul class="sub-menu">
+                            <li><a href="#courses">Курсы и вакансии</a></li>
+                            <li><a href="#application-form" id="application-form-link">Заявка</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="blog.html">Блог</a></li>
+                    <li><a href="#" class="nav-btn-appointment">Записаться</a></li>
+                </ul>
+            </div>
+            <div class="header-icons">
+                <span id="header-user"></span>
+                <a href="https://www.instagram.com/urbash.hair/" target="_blank" class="instagram-icon"><img src="images/inst.png" alt="Instagram"></a>
+                <button class="menu-toggle" id="menu-toggle"><img src="images/menu.png" alt="Меню"></button>
+            </div>
+        </div>
+    </header>
+    <main class="work-with-us">
+        <h1>Присоединяйтесь к команде URBASH.hair!</h1>
+        <div class="section" id="courses">
+            <h2>Наши курсы и вакансии</h2>
+            <div class="price-list">
+                <div class="price-item">
+                    <h3>Курс "Мастер кератина"</h3>
+                    <p>Полный курс по освоению техник кератинового выпрямления и восстановления волос.</p>
+                    <ul><li>Теория и практика</li><li>Работа с моделями</li><li>Сертификат по окончании</li></ul>
+                    <p class="price">От 500 BYN</p>
+                </div>
+                <div class="price-item">
+                    <h3>Курс "Ботокс для волос"</h3>
+                    <p>Интенсивный курс по технологии ботокса для волос, глубокого увлажнения и питания.</p>
+                    <ul><li>Изучение различных составов</li><li>Практические занятия</li><li>Поддержка после обучения</li></ul>
+                    <p class="price">От 400 BYN</p>
+                </div>
+                <div class="price-item">
+                    <h3>Вакансия: Мастер по кератину и ботоксу</h3>
+                    <p>Ищем опытного мастера для работы в нашей команде. Высокая зарплата и гибкий график.</p>
+                    <ul><li>Опыт работы от 1 года</li><li>Портфолио работ</li><li>Желание развиваться</li></ul>
+                    <p class="price">З/П по результатам собеседования</p>
+                </div>
+                <div class="price-item">
+                    <h3>Вакансия: Администратор салона</h3>
+                    <p>Ответственный и коммуникабельный администратор для работы с клиентами и организации.</p>
+                    <ul><li>Опыт работы приветствуется</li><li>Знание ПК</li><li>Отличные коммуникативные навыки</li></ul>
+                    <p class="price">З/П по результатам собеседования</p>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Оставьте заявку</h2>
+            <form id="application-form">
+                <div class="form-group">
+                    <label for="name">Ваше имя и фамилия:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Номер телефона:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                </div>
+                <div class="form-group">
+                    <label>Выберите интересующую услугу/вакансию:</label>
+                    <div class="radio-group">
+                        <div><input type="radio" id="course-keratin" name="interest" value="Курс 'Мастер кератина'" required><label for="course-keratin">Курс "Мастер кератина"</label></div>
+                        <div><input type="radio" id="course-botox" name="interest" value="Курс 'Ботокс для волос'"><label for="course-botox">Курс "Ботокс для волос"</label></div>
+                        <div><input type="radio" id="job-master" name="interest" value="Вакансия: Мастер"><label for="job-master">Вакансия: Мастер</label></div>
+                        <div><input type="radio" id="job-admin" name="interest" value="Вакансия: Администратор"><label for="job-admin">Вакансия: Администратор</label></div>
+                        <div><input type="radio" id="other" name="interest" value="Другое"><label for="other">Другое</label></div>
+                    </div>
+                </div>
+                <button type="submit" class="submit-button">Отправить заявку</button>
+                <div id="success-message" class="success-message">Спасибо! Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время!</div>
+            </form>
+        </div>
+    </main>
+<div class="appointment-modal" id="appointment-modal">
+  <div class="appointment-modal__content">
+    <button class="appointment-modal__close" id="close-modal-btn">&times;</button>
+    <h2 class="appointment-modal__title">Онлайн запись</h2>
+    <form class="appointment-form" id="main-appointment-form">
+      <div class="form-group">
+        <label for="serviceId">Выберите услугу</label>
+        <select id="serviceId" name="serviceId" required>
+          <option value="">-- Выберите услугу --</option>
+          <option value="1">Кератиновое выпрямление</option>
+          <option value="2">Ботокс</option>
+          <option value="3">Холодное восстановление</option>
+          <option value="4">Обучение/Курсы</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="date">Выберите дату</label>
+        <input type="text" id="date" name="date" placeholder="гггг-мм-дд" required>
+      </div>
+      <div class="form-group">
+        <label for="time">Выберите время</label>
+        <input type="time" id="time" name="time" required>
+      </div>
+      <div class="form-group">
+        <label for="notes">Ваши пожелания (необязательно)</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Напишите, что хотите уточнить..."></textarea>
+      </div>
+      <button type="submit" class="button">Записаться</button>
+    </form>
+    <div id="appointment-success" class="success-message" style="display: none; margin-top: 20px; text-align: center; color: #28a745;">Спасибо! Мы свяжемся с вами для подтверждения.</div>
+  </div>
+</div>
+    <div class="appointment-modal" id="request-modal">
+        <div class="appointment-modal__content">
+            <button class="appointment-modal__close" id="close-request-modal">&times;</button>
+            <h2 class="appointment-modal__title">Оставьте заявку</h2>
+            <form class="appointment-form" id="request-form">
+                <div class="form-group">
+                    <label for="request-name">Ваше имя и фамилия:</label>
+                    <input type="text" id="request-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="request-email">Email:</label>
+                    <input type="email" id="request-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="request-phone">Номер телефона:</label>
+                    <input type="tel" id="request-phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                </div>
+                <div class="form-group">
+                    <label>Выберите интересующую услугу/вакансию:</label>
+                    <div class="radio-group">
+                        <div><input type="radio" id="request-course-keratin" name="interest" value="Курс 'Мастер кератина'" required><label for="request-course-keratin">Курс "Мастер кератина"</label></div>
+                        <div><input type="radio" id="request-course-botox" name="interest" value="Курс 'Ботокс для волос'"><label for="request-course-botox">Курс "Ботокс для волос"</label></div>
+                        <div><input type="radio" id="request-job-master" name="interest" value="Вакансия: Мастер"><label for="request-job-master">Вакансия: Мастер</label></div>
+                        <div><input type="radio" id="request-job-admin" name="interest" value="Вакансия: Администратор"><label for="request-job-admin">Вакансия: Администратор</label></div>
+                        <div><input type="radio" id="request-other" name="interest" value="Другое"><label for="request-other">Другое</label></div>
+                    </div>
+                </div>
+                <button type="submit" class="button">Отправить заявку</button>
+                <div id="request-success" class="success-message" style="display: none;">Спасибо! Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время!</div>
+            </form>
+        </div>
+    </div>
+<div class="appointment-modal" id="registration-modal">
+    <div class="appointment-modal__content">
+        <button class="appointment-modal__close" id="close-registration-modal">&times;</button>
+        <h2 class="appointment-modal__title" id="auth-modal-title">Регистрация</h2>
+        <form class="appointment-form" id="auth-form">
+            <div id="step-phone" class="auth-step">
+                <div id="registration-fields" style="display: block;">
+                    <div class="form-group"><label for="auth-fullname">Ваше ФИО <span style="color:#e0b06b;">*</span></label><input type="text" id="auth-fullname" name="fullname" placeholder="Иванов Иван Иванович"></div>
+                    <div class="form-group"><label for="auth-email">Email (необязательно)</label><input type="email" id="auth-email" name="email" placeholder="ivan@example.com"></div>
+                </div>
+                <div class="form-group"><label for="auth-phone">Номер телефона <span style="color:#e0b06b;">*</span></label><input type="tel" id="auth-phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required></div>
+                <button type="button" class="button" id="send-code-btn">Получить код</button>
+            </div>
+            <div id="step-code" class="auth-step" style="display: none;">
+                <div class="form-group"><label for="auth-code">Код из SMS</label><input type="text" id="auth-code" name="code" placeholder="123456" required></div>
+                <button type="submit" class="button" id="verify-code-btn">Подтвердить</button>
+                <div style="margin-top: 10px; text-align: center;"><a href="#" id="back-to-phone" style="color:#e0b06b;">Назад</a></div>
+            </div>
+        </form>
+        <div style="margin-top: 15px; text-align: center;"><a href="#" id="switch-auth-mode" style="color:#e0b06b;">Уже есть аккаунт? Войти</a></div>
+        <div id="auth-error" style="color: #ff6b6b; margin-top: 10px; text-align: center; display: none;"></div>
+    </div>
+</div>
+    <footer class="footer">
+        <div class="footer__inner">
+            <a href="main.html" class="logo footer__logo">URBASH.hair</a>
+            <div class="footer__address">Находимся по адресу: ул. Кирилла Туровского 18, Минск, Минская область 220076</div>
+            <a href="https://www.instagram.com/urbash.hair/" target="_blank" class="instagram-icon footer__instagram-icon"><img src="images/inst.png" alt="Instagram"></a>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+<script src="js/config.js"></script>
+<script src="js/errors.js"></script>
+<script src="js/menu.js"></script>
+
+
+    <script src="js/modal.js"></script>
+    <script src="js/user.js"></script>
+</body>
+</html>
+

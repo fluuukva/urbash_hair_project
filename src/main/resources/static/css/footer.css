@@ -1,0 +1,133 @@
+.footer {
+  background-color: #131313;
+  padding: 20px 0;
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.footer__inner {
+  max-width: 2000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 100px;
+}
+
+.footer__logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #FFD700;
+  text-decoration: none;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  order: 0;
+}
+
+.footer__address {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFD700;
+  line-height: 1.5;
+  text-align: center;
+  flex-grow: 1;
+  max-width: none;
+  margin: 0 40px;
+  order: 0;
+}
+
+.footer__instagram-icon {
+  flex-shrink: 0;
+  order: 0;
+}
+
+.footer__instagram-icon img {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-sizing: content-box;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+  filter: none;
+}
+
+.footer__instagram-icon img:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
+  box-shadow: none;
+}
+
+@media (max-width: 1200px) {
+    .footer__inner {
+        padding: 0 60px;
+    }
+}
+
+@media (max-width: 992px) {
+    .footer__inner {
+        padding: 0 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer__inner {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+        padding: 10px 20px;
+    }
+
+    .footer__logo {
+        font-size: 24px;
+        order: 1;
+        flex-basis: auto;
+        margin-right: auto;
+    }
+
+    .footer__instagram-icon {
+        order: 2;
+        align-self: center;
+        margin-left: auto;
+    }
+
+    .footer__address {
+        order: 3;
+        flex-basis: 100%;
+        text-align: left;
+        margin: 10px 0 0 0;
+        flex-grow: 0;
+        white-space: normal;
+    }
+
+    .footer__instagram-icon img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer__inner {
+        padding: 8px 15px;
+    }
+
+    .footer__logo {
+        font-size: 20px;
+    }
+
+    .footer__address {
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .footer__instagram-icon img {
+        width: 18px;
+        height: 18px;
+    }
+}

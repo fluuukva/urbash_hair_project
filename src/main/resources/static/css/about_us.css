@@ -1,0 +1,226 @@
+.about-us {
+  background-color: #131313;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #e0e0e0;
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+  min-height: auto;
+}
+
+.about-us__inner-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+  position: relative;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-us__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4vw, 64px);
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 11;
+  line-height: 1;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
+.about-us__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: -80px;
+  gap: 50px;
+}
+
+.about-us__text-block {
+  width: 450px;
+  line-height: 1.7;
+  font-size: clamp(16px, 1.5vw, 20px);
+  position: relative;
+  z-index: 5;
+  background-color: #131313;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 550px;
+  margin-right: 10px;
+}
+
+.about-us__text-block p {
+  margin-bottom: 0;
+  margin-top: 80px;
+}
+
+.about-us__images-wrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0;
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  width: calc(100% - 450px - 10px);
+  z-index: 1;
+  align-self: flex-start;
+  margin-right: -10px;
+}
+
+.about-us__images-wrapper img {
+  width: 100%;
+  height: 550px;
+  object-fit: cover;
+  border-radius: 0px;
+  box-shadow: none;
+  margin: 0;
+  z-index: auto;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #C9A657;
+  color: #131313;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  align-self: flex-start;
+}
+
+.button:hover {
+  background-color: #D0B004;
+}
+
+@media (max-width: 1200px) {
+  .about-us {
+    padding: 8px 0;
+    min-height: auto;
+  }
+  .about-us__inner-container {
+    padding: 0 40px;
+    min-height: auto;
+    align-items: center;
+  }
+  .about-us__title {
+    font-size: clamp(32px, 5vw, 52px);
+    text-align: center;
+    padding: 0;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    line-height: normal;
+  }
+  .about-us__content {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    margin-top: 30px;
+  }
+  .about-us__text-block {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0;
+    order: 1;
+    z-index: 2;
+    height: auto;
+    justify-content: flex-start;
+  }
+  .about-us__text-block p {
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+  .about-us__images-wrapper {
+    position: relative;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0;
+    order: 2;
+    z-index: 1;
+    padding-right: 0;
+    margin-top: 0;
+    align-self: auto;
+  }
+  .about-us__images-wrapper img {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    height: 300px;
+    margin-left: 0;
+    z-index: auto;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .button {
+    align-self: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-us {
+    padding: 8px 0;
+  }
+  .about-us__inner-container {
+    padding: 0 20px;
+  }
+  .about-us__title {
+    font-size: clamp(28px, 6vw, 40px);
+    margin-bottom: 30px;
+  }
+  .about-us__text-block {
+    font-size: 16px;
+  }
+  .about-us__images-wrapper img {
+    height: 250px;
+  }
+  .button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-us {
+    padding: 8px 0;
+  }
+  .about-us__inner-container {
+    padding: 0 15px;
+  }
+  .about-us__title {
+    font-size: clamp(24px, 7vw, 32px);
+    margin-bottom: 20px;
+  }
+  .about-us__text-block {
+    font-size: 14px;
+  }
+  .about-us__images-wrapper img {
+    height: 200px;
+  }
+  .button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}

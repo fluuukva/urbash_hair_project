@@ -1,0 +1,222 @@
+/* ===== Общие стили для всех модальных окон (запись, заявка, регистрация) ===== */
+
+#appointment-modal.appointment-modal,
+#request-modal.appointment-modal,
+#registration-modal.appointment-modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0, 0, 0, 0.85); 
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  opacity: 0; 
+  visibility: hidden; 
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+#appointment-modal.appointment-modal.is-visible,
+#request-modal.appointment-modal.is-visible,
+#registration-modal.appointment-modal.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#appointment-modal .appointment-modal__content,
+#request-modal .appointment-modal__content,
+#registration-modal .appointment-modal__content {
+  background-color: #1a1a1a; 
+  color: #f0f0f0; 
+  padding: 40px; 
+  border-radius: 12px; 
+  position: relative;
+  width: 90%;
+  max-width: 550px; 
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7); 
+  transform: translateY(-20px); 
+  transition: transform 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  box-sizing: border-box; 
+}
+
+#appointment-modal.is-visible .appointment-modal__content,
+#request-modal.is-visible .appointment-modal__content,
+#registration-modal.is-visible .appointment-modal__content {
+  transform: translateY(0);
+}
+
+#appointment-modal .appointment-modal__title,
+#request-modal .appointment-modal__title,
+#registration-modal .appointment-modal__title {
+  font-family: 'Playfair Display', serif; 
+  font-size: 2.2em; 
+  text-align: center;
+  margin-bottom: 30px;
+  color: #e0b06b; 
+  letter-spacing: 1px;
+}
+
+#appointment-modal .appointment-modal__close,
+#request-modal .appointment-modal__close,
+#registration-modal .appointment-modal__close {
+  color: #e0b06b; 
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 36px; 
+  font-weight: normal; 
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.2s ease-in-out;
+  line-height: 1; 
+  padding: 0; 
+}
+
+#appointment-modal .appointment-modal__close:hover,
+#request-modal .appointment-modal__close:hover,
+#registration-modal .appointment-modal__close:hover,
+#appointment-modal .appointment-modal__close:focus,
+#request-modal .appointment-modal__close:focus,
+#registration-modal .appointment-modal__close:focus {
+  color: #ffde94; 
+  text-decoration: none;
+  outline: none; 
+}
+
+#appointment-modal .appointment-form .form-group,
+#request-modal .appointment-form .form-group,
+#registration-modal .appointment-form .form-group {
+  margin-bottom: 25px; 
+}
+
+#appointment-modal .appointment-form label,
+#request-modal .appointment-form label,
+#registration-modal .appointment-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif; 
+  font-weight: 500;
+  color: #cccccc; 
+  font-size: 0.95em;
+}
+
+#appointment-modal .appointment-form input[type="text"],
+#appointment-modal .appointment-form input[type="tel"],
+#appointment-modal .appointment-form input[type="password"],
+#appointment-modal .appointment-form select,
+#request-modal .appointment-form input[type="text"],
+#request-modal .appointment-form input[type="tel"],
+#request-modal .appointment-form input[type="password"],
+#request-modal .appointment-form select,
+#registration-modal .appointment-form input[type="text"],
+#registration-modal .appointment-form input[type="tel"],
+#registration-modal .appointment-form input[type="password"],
+#registration-modal .appointment-form select {
+  width: 100%;
+  padding: 14px 18px; 
+  border: 1px solid rgba(255, 255, 255, 0.2); 
+  border-radius: 8px; 
+  background-color: #2a2a2a; 
+  color: #f0f0f0; 
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+}
+
+#appointment-modal .appointment-form input[type="text"]::placeholder,
+#appointment-modal .appointment-form input[type="tel"]::placeholder,
+#request-modal .appointment-form input[type="text"]::placeholder,
+#request-modal .appointment-form input[type="tel"]::placeholder,
+#registration-modal .appointment-form input[type="text"]::placeholder,
+#registration-modal .appointment-form input[type="tel"]::placeholder {
+  color: #888; 
+  opacity: 1; 
+}
+
+#appointment-modal .appointment-form select option[value=""]:first-of-type,
+#request-modal .appointment-form select option[value=""]:first-of-type,
+#registration-modal .appointment-form select option[value=""]:first-of-type {
+  color: #888; 
+  display: none; 
+}
+
+#appointment-modal .appointment-form select:invalid,
+#request-modal .appointment-form select:invalid,
+#registration-modal .appointment-form select:invalid {
+  color: #888; 
+}
+
+#appointment-modal .appointment-form select option,
+#request-modal .appointment-form select option,
+#registration-modal .appointment-form select option {
+  background-color: #2a2a2a; 
+  color: #f0f0f0; 
+}
+
+#appointment-modal .appointment-form select,
+#request-modal .appointment-form select,
+#registration-modal .appointment-form select {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0b06b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 18px;
+  padding-right: 40px; 
+}
+
+#appointment-modal .appointment-form input[type="text"]:focus,
+#appointment-modal .appointment-form input[type="tel"]:focus,
+#appointment-modal .appointment-form input[type="password"]:focus,
+#appointment-modal .appointment-form select:focus,
+#request-modal .appointment-form input[type="text"]:focus,
+#request-modal .appointment-form input[type="tel"]:focus,
+#request-modal .appointment-form input[type="password"]:focus,
+#request-modal .appointment-form select:focus,
+#registration-modal .appointment-form input[type="text"]:focus,
+#registration-modal .appointment-form input[type="tel"]:focus,
+#registration-modal .appointment-form input[type="password"]:focus,
+#registration-modal .appointment-form select:focus {
+  border-color: #e0b06b; 
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(224, 176, 107, 0.3); 
+}
+
+#appointment-modal .appointment-form .button,
+#request-modal .appointment-form .button,
+#registration-modal .appointment-form .button {
+  width: 100%;
+  padding: 16px;
+  background-color: #e0b06b; 
+  color: #1a1a1a; 
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  letter-spacing: 0.5px;
+  margin-top: 15px;
+}
+
+#appointment-modal .appointment-form .button:hover,
+#request-modal .appointment-form .button:hover,
+#registration-modal .appointment-form .button:hover {
+  background-color: #ffde94; 
+  transform: translateY(-2px); 
+}
+
+#appointment-modal .appointment-form .button:active,
+#request-modal .appointment-form .button:active,
+#registration-modal .appointment-form .button:active {
+  transform: translateY(0);
+}

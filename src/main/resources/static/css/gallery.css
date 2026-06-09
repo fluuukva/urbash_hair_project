@@ -1,0 +1,177 @@
+/* ===== ГАЛЕРЕЯ: заголовки справа, фото одинаковые ===== */
+.gallery {
+    padding: 0 0 8px 0;
+}
+
+.gallery__title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.2;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.gallery__services {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.service-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+}
+
+/* Карусель занимает всё свободное место */
+.service-block__carousel {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #C9A03D rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+}
+
+.service-block__carousel::-webkit-scrollbar {
+    height: 5px;
+}
+
+.service-block__carousel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+.service-block__carousel::-webkit-scrollbar-thumb {
+    background: #C9A03D;
+    border-radius: 8px;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 15px;
+    padding: 8px 5px;
+}
+
+/* Все фото строго одинакового размера */
+.carousel-item {
+    flex-shrink: 0;
+    width: 240px;
+    height: 300px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: #f5f5f5;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s;
+}
+
+.carousel-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-item img:hover {
+    transform: scale(1.05);
+}
+
+/* Вертикальный текст (направление влево) — теперь справа */
+.service-block__label.vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 0.12em;
+    color: #C9A03D;
+    background: rgba(201, 160, 61, 0.1);
+    padding: 20px 10px;
+    border-radius: 50px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    line-height: 1.25;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Адаптив: на мобильных текст под фото */
+@media (max-width: 768px) {
+    .gallery {
+        padding: 0 0 8px 0;
+    }
+    .gallery__title {
+        font-size: clamp(28px, 5vw, 36px);
+        margin-bottom: 25px;
+    }
+    .gallery__services {
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .service-block {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 15px;
+    }
+    .service-block__label.vertical {
+        writing-mode: horizontal-tb;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 1.5rem;
+        padding: 10px 15px;
+        background: rgba(201, 160, 61, 0.15);
+        display: block;
+    }
+    .carousel-item {
+        width: 200px;
+        height: 250px;
+    }
+    .carousel-track {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        padding: 0 0 8px 0;
+    }
+    .gallery__title {
+        font-size: clamp(24px, 6vw, 28px);
+        margin-bottom: 20px;
+    }
+    .service-block {
+        padding: 12px;
+    }
+    .carousel-item {
+        width: 160px;
+        height: 200px;
+    }
+    .service-block__label.vertical {
+        font-size: 1.3rem;
+        padding: 8px 12px;
+    }
+    .carousel-track {
+        gap: 10px;
+    }
+}

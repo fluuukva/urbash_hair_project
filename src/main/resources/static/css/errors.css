@@ -1,0 +1,15 @@
+:root{--error-color:#ff5c5c;--error-border:rgba(255,92,92,.35);--error-bg:rgba(255,92,92,.12)}
+
+.app-error{
+  display:none;
+  margin-top:12px;
+  padding:12px 14px;
+  background:var(--error-bg);
+  border:1px solid var(--error-border);
+  color:var(--error-color);
+  border-radius:10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight:600;
+  line-height:1.3;
+}
+

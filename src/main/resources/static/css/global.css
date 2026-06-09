@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  background-color: #131313;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.site-wrapper {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding-left: var(--page-padding-desktop);
+  padding-right: var(--page-padding-desktop);
+  box-sizing: border-box;
+}
+
+:root {
+  --page-padding-desktop: 40px;
+  --page-padding-laptop: 30px;
+  --page-padding-tablet: 20px;
+  --page-padding-mobile: 15px;
+  --page-padding-small-mobile: 10px;
+}
+
+@media (max-width: 1200px) {
+  .site-wrapper {
+    padding-left: var(--page-padding-laptop);
+    padding-right: var(--page-padding-laptop);
+  }
+}
+
+@media (max-width: 992px) {
+  .site-wrapper {
+    padding-left: var(--page-padding-tablet);
+    padding-right: var(--page-padding-tablet);
+  }
+}
+
+@media (max-width: 768px) {
+  .site-wrapper {
+    padding-left: var(--page-padding-mobile);
+    padding-right: var(--page-padding-mobile);
+  }
+}
+
+@media (max-width: 480px) {
+  .site-wrapper {
+    padding-left: var(--page-padding-small-mobile);
+    padding-right: var(--page-padding-small-mobile);
+  }
+}

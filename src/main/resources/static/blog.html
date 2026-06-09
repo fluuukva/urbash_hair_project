@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог URBASH.hair</title>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/header_banner.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/modal_appointment.css">
+    <link rel="stylesheet" href="css/errors.css">
+    
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: #131313;
+            color: #fff;
+        }
+        
+        .main-content {
+            margin-top: 100px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .blog-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .blog-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            color: #e0e0e0;
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .blog-post {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        .post-image-wrapper {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-post:hover .post-image {
+            transform: scale(1.05);
+        }
+        
+        .post-content {
+            padding: 25px;
+        }
+        
+        .post-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #D0B004;
+            margin-bottom: 10px;
+        }
+        
+        .post-meta {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .post-excerpt {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .btn-read-more {
+            display: inline-block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #D0B004;
+            text-decoration: none;
+            border: 1px solid #D0B004;
+            padding: 8px 20px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-read-more:hover {
+            background-color: #D0B004;
+            color: #131313;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            color: #fff;
+        }
+        
+        .close-button {
+            color: #D0B004;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-button:hover {
+            color: #fff;
+        }
+        
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            padding-right: 30px;
+        }
+        
+        .modal-body-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .modal-text {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-title {
+                font-size: 36px;
+            }
+            
+            .blog-subtitle {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header__inner">
+            <a href="main.html" class="logo">URBASH.hair</a>
+
+            <div class="main-nav" id="main-nav">
+                <ul class="nav-list">
+                    <li class="menu-item-has-children">
+                        <a href="#">Главная <span class="arrow">▼</span></a>
+                        <ul class="sub-menu">
+                            <li><a href="main.html#about-us">О нас</a></li>
+                            <li><a href="main.html#masters">Мастера</a></li>
+                            <li><a href="main.html#price-services">Прайс/услуги</a></li>
+                            <li><a href="main.html#gallery">Галерея</a></li>
+                            <li><a href="main.html#reviews">Отзывы</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item-has-children">
+                        <a href="#">Работа с нами <span class="arrow">▼</span></a>
+                        <ul class="sub-menu">
+                            <li><a href="work-with-us.html#courses">Курсы и вакансии</a></li>
+                            <li><a href="work-with-us.html#application-form">Заявка</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="blog.html">Блог</a></li>
+                    <li><a href="#" class="nav-btn-appointment">Записаться</a></li>
+                </ul>
+            </div>
+            
+            <div class="header-icons">
+                <span id="header-user"></span>
+                <button id="login-btn" style="background:none;border:none;color:#e0b06b;cursor:pointer;margin-right:10px;">Войти</button>
+                <a href="https://www.instagram.com/urbash.hair/" target="_blank" class="instagram-icon">
+                    <img src="images/inst.png" alt="Instagram">
+                </a>
+                <button class="menu-toggle" id="menu-toggle">
+                    <img src="images/menu.png" alt="Меню">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="blog-title">Наш блог: Искусство ухода за волосами</h1>
+            <p class="blog-subtitle">Погрузитесь в мир эксклюзивных советов, последних трендов и секретов идеальных волос от URBASH.hair.</p>
+            <section class="blog-grid" id="blog-posts"></section>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer__inner">
+            <a href="main.html" class="logo footer__logo">URBASH.hair</a>
+            <div class="footer__address">Находимся по адресу: ул. Кирилла Туровского 18, Минск, Минская область 220076</div>
+            <a href="https://www.instagram.com/urbash.hair/" target="_blank" class="instagram-icon footer__instagram-icon">
+                <img src="images/inst.png" alt="Instagram">
+            </a>
+        </div>
+    </footer>
+
+    <div class="appointment-modal" id="appointment-modal">
+        <div class="appointment-modal__content">
+            <button class="appointment-modal__close" id="close-modal-btn">&times;</button>
+            <h2 class="appointment-modal__title">Онлайн запись</h2>
+            <form class="appointment-form" id="main-appointment-form">
+                <div class="form-group">
+                    <label for="serviceId">Выберите услугу</label>
+                    <select id="serviceId" name="serviceId" required>
+                        <option value="">-- Выберите услугу --</option>
+                        <option value="1">Кератиновое выпрямление</option>
+                        <option value="2">Ботокс</option>
+                        <option value="3">Холодное восстановление</option>
+                        <option value="4">Обучение/Курсы</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Выберите дату</label>
+                    <input type="text" id="date" name="date" placeholder="гггг-мм-дд" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Выберите время</label>
+                    <input type="time" id="time" name="time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Ваши пожелания (необязательно)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Напишите, что хотите уточнить..."></textarea>
+                </div>
+
+                <button type="submit" class="button">Записаться</button>
+            </form>
+            <div id="appointment-success" class="success-message" style="display: none; margin-top: 20px; text-align: center; color: #28a745;">Спасибо! Мы свяжемся с вами для подтверждения.</div>
+        </div>
+    </div>
+
+    <div class="appointment-modal" id="request-modal">
+        <div class="appointment-modal__content">
+            <button class="appointment-modal__close" id="close-request-modal">&times;</button>
+            <h2 class="appointment-modal__title">Оставьте заявку</h2>
+            <form class="appointment-form" id="request-form">
+                <div class="form-group">
+                    <label for="request-name">Ваше имя и фамилия:</label>
+                    <input type="text" id="request-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="request-email">Email:</label>
+                    <input type="email" id="request-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="request-phone">Номер телефона:</label>
+                    <input type="tel" id="request-phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                </div>
+                <div class="form-group">
+                    <label>Выберите интересующую услугу/вакансию:</label>
+                    <div class="radio-group">
+                        <div>
+                            <input type="radio" id="request-course-keratin" name="interest" value="Курс 'Мастер кератина'" required>
+                            <label for="request-course-keratin">Курс "Мастер кератина"</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="request-course-botox" name="interest" value="Курс 'Ботокс для волос'">
+                            <label for="request-course-botox">Курс "Ботокс для волос"</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="request-job-master" name="interest" value="Вакансия: Мастер">
+                            <label for="request-job-master">Вакансия: Мастер</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="request-job-admin" name="interest" value="Вакансия: Администратор">
+                            <label for="request-job-admin">Вакансия: Администратор</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="request-other" name="interest" value="Другое">
+                            <label for="request-other">Другое</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="request-message">Ваше сообщение:</label>
+                    <textarea id="request-message" name="message" rows="5"></textarea>
+                </div>
+                <button type="submit" class="button">Отправить заявку</button>
+                <div id="request-success" class="success-message" style="display: none;">
+                    Спасибо! Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время!
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-container" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title" class="modal-title"></h2>
+            <div class="modal-body-content">
+                <img id="modal-image" src="" alt="" class="modal-image">
+                <div id="modal-text" class="modal-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="appointment-modal" id="registration-modal">
+        <div class="appointment-modal__content">
+            <button class="appointment-modal__close" id="close-registration-modal">&times;</button>
+            <h2 class="appointment-modal__title" id="auth-modal-title">Регистрация</h2>
+            <form class="appointment-form" id="auth-form">
+                <div id="step-phone" class="auth-step">
+                    <div id="registration-fields" style="display: block;">
+                        <div class="form-group">
+                            <label for="auth-fullname">Ваше ФИО <span style="color:#e0b06b;">*</span></label>
+                            <input type="text" id="auth-fullname" name="fullname" placeholder="Иванов Иван Иванович">
+                        </div>
+                        <div class="form-group">
+                            <label for="auth-email">Email (необязательно)</label>
+                            <input type="email" id="auth-email" name="email" placeholder="ivan@example.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="auth-phone">Номер телефона <span style="color:#e0b06b;">*</span></label>
+                        <input type="tel" id="auth-phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                    </div>
+                    <button type="button" class="button" id="send-code-btn">Получить код</button>
+                </div>
+                <div id="step-code" class="auth-step" style="display: none;">
+                    <div class="form-group">
+                        <label for="auth-code">Код из SMS</label>
+                        <input type="text" id="auth-code" name="code" placeholder="123456" required>
+                    </div>
+                    <button type="submit" class="button" id="verify-code-btn">Подтвердить</button>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <a href="#" id="back-to-phone" style="color:#e0b06b;">Назад</a>
+                    </div>
+                </div>
+            </form>
+            <div style="margin-top: 15px; text-align: center;">
+                <a href="#" id="switch-auth-mode" style="color:#e0b06b;">Уже есть аккаунт? Войти</a>
+            </div>
+            <div id="auth-error" style="color: #ff6b6b; margin-top: 10px; text-align: center; display: none;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/errors.js"></script>
+
+    <script src="js/menu.js"></script>
+
+    <script src="js/modal.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/blog.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AugmentWebviewStateStore">
+    <option name="stateMap">
+      <map>
+        <entry key="CHAT_STATE" value="[[&quot;currentConversationId&quot;,&quot;pins&quot;,&quot;agentExecutionMode&quot;,&quot;isPanelCollapsed&quot;,&quot;displayedAnnouncements&quot;,&quot;conversations&quot;,&quot;onboarding&quot;,&quot;a|0|1|2|3|4|5|6&quot;,&quot;012a5c94-0b3d-4cf5-9633-17450a898856&quot;,&quot;o|&quot;,&quot;manual&quot;,&quot;b|F&quot;,&quot;a|&quot;,&quot;a|8&quot;,&quot;id&quot;,&quot;name&quot;,&quot;createdAtIso&quot;,&quot;lastInteractedAtIso&quot;,&quot;selectedModelId&quot;,&quot;requestIds&quot;,&quot;isPinned&quot;,&quot;isShareable&quot;,&quot;extraData&quot;,&quot;personaType&quot;,&quot;feedbackStates&quot;,&quot;rootTaskUuid&quot;,&quot;toolUseStates&quot;,&quot;chatHistory&quot;,&quot;draftExchange&quot;,&quot;a|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S&quot;,&quot;⚠️ **You have run out of credits for mfalejchik07@gmail.com. Click [here](https://app.augmentcode.com/account) to upgrade.** ⚠️&quot;,&quot;2026-02-26T17:13:51.832Z&quot;,&quot;2026-02-26T17:57:30.300Z&quot;,&quot;claude-sonnet-4-6&quot;,&quot;isAgentConversation&quot;,&quot;a|Y&quot;,&quot;b|T&quot;,&quot;o|Z|a&quot;,&quot;n|0&quot;,&quot;646da95c-249e-47b0-9676-318e2b79b2ed&quot;,&quot;request_message&quot;,&quot;rich_text_json_repr&quot;,&quot;status&quot;,&quot;a|e|f|g&quot;,&quot;&quot;,&quot;type&quot;,&quot;content&quot;,&quot;a|j|k&quot;,&quot;doc&quot;,&quot;a|j&quot;,&quot;paragraph&quot;,&quot;o|n|o&quot;,&quot;a|p&quot;,&quot;o|l|m|q&quot;,&quot;draft&quot;,&quot;o|h|i|r|s&quot;,&quot;o|T|8|U|V|W|X|C|B|B|b|c|9|d|9|C|t&quot;,&quot;o|D|u&quot;,&quot;shown&quot;,&quot;workspaceQuestions&quot;,&quot;a|w|x&quot;,&quot;o|y|B|C&quot;,&quot;o|7|8|9|A|B|C|v|z&quot;],&quot;10&quot;]" />
+      </map>
+    </option>
+  </component>
+</project>

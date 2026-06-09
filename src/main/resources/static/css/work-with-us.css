@@ -1,0 +1,213 @@
+.work-with-us {
+    padding: 60px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.work-with-us h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: #FFD700;
+    margin-bottom: 40px;
+    letter-spacing: 1.5px;
+}
+
+.section {
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: left;
+}
+
+.section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: #FFD700;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #ccc;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+    width: calc(100% - 20px);
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.price-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.price-item {
+    background-color: #2a2a2a;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #3a3a3a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.price-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border-color: #FFD700;
+}
+
+.price-item h3 {
+    font-family: 'Playfair Display', serif;
+    color: #FFD700;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.price-item p {
+    font-size: 16px;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.price-item .price {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: #FFD700;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.radio-group label {
+    background-color: #2a2a2a;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    border: 1px solid #444;
+    color: #fff;
+}
+
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group input[type="radio"]:checked + label {
+    background-color: #FFD700;
+    color: #131313;
+    border-color: #FFD700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #FFD700;
+    color: #131313;
+    font-size: 20px;
+    font-weight: 700;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 30px;
+}
+
+.submit-button:hover {
+    background-color: #e6c200;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(rgba(255, 215, 0, 0.3));
+}
+
+.success-message {
+    background-color: #28a745;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 30px;
+    font-size: 18px;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .work-with-us {
+        padding: 40px 20px;
+    }
+    .work-with-us h1 {
+        font-size: 38px;
+    }
+    .section {
+        padding: 30px;
+    }
+    .section h2 {
+        font-size: 30px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+    }
+    .price-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .work-with-us h1 {
+        font-size: 30px;
+    }
+    .section h2 {
+        font-size: 24px;
+    }
+    .submit-button {
+        font-size: 18px;
+        padding: 12px;
+    }
+}

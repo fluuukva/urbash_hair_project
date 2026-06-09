@@ -1,0 +1,295 @@
+.our-masters {
+  padding: 20px 40px 70px;
+  text-align: center;
+  background: transparent;
+  margin-top: -30px; /* убираем зазор между блоками */
+}
+
+.our-masters__title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(36px, 4vw, 52px);
+  color: #fff;
+  margin-bottom: 50px;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+
+.our-masters__title::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  bottom: -15px;
+  width: 76%;
+  height: 2px;
+  background: #D4AF37;
+  border-radius: 2px;
+}
+
+/* Карточка — больше и шире */
+.master-card {
+  background: #1A1A1A;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.master-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border-color: rgba(212, 175, 55, 0.35);
+}
+
+.master-card__image-wrapper {
+  flex-shrink: 0;
+  width: 35%;
+  max-width: 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+.master-card__image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.master-card:hover .master-card__image-wrapper img {
+  transform: scale(1.03);
+}
+
+/* Текстовый блок */
+.master-card__info {
+  flex: 1;
+  padding: 35px 40px 35px 30px;
+  text-align: left;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.master-card__name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 34px;
+  color: #D4AF37;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
+}
+
+.master-card__description {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  color: #CCCCCC;
+}
+
+.master-card__services-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #D4AF37;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.master-card__services-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 30px;
+}
+
+.master-card__services-list li {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  margin-bottom: 0;
+  position: relative;
+  padding-left: 20px;
+  line-height: 1.5;
+  color: #E0E0E0;
+  transition: color 0.2s ease;
+}
+
+.master-card__services-list li:hover {
+  color: #D4AF37;
+}
+
+.master-card__services-list li::before {
+  content: '•';
+  display: inline-block;
+  color: #D4AF37;
+  font-size: 16px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+
+/* Планшеты */
+@media (max-width: 992px) {
+  .our-masters {
+    padding: 15px 30px 60px;
+    margin-top: -20px;
+  }
+  
+  .master-card {
+    max-width: 800px;
+  }
+  
+  .master-card__info {
+    padding: 25px 30px 25px 25px;
+  }
+  
+  .master-card__name {
+    font-size: 30px;
+  }
+  
+  .master-card__description {
+    font-size: 15px;
+  }
+  
+  .master-card__services-title {
+    font-size: 15px;
+  }
+  
+  .master-card__services-list li {
+    font-size: 14px;
+  }
+}
+
+/* Мобильные телефоны */
+@media (max-width: 768px) {
+  .our-masters {
+    padding: 10px 20px 50px;
+    margin-top: -15px;
+  }
+  
+  .our-masters__title {
+    font-size: clamp(30px, 5vw, 40px);
+    margin-bottom: 35px;
+  }
+  
+  .our-masters__title::after {
+    left: 15%;
+    width: 70%;
+  }
+  
+  .master-card {
+    flex-direction: row;
+    max-width: 100%;
+  }
+  
+  .master-card__image-wrapper {
+    width: 40%;
+    min-height: 240px;
+  }
+  
+  .master-card__info {
+    padding: 18px 20px 18px 18px;
+  }
+  
+  .master-card__name {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .master-card__description {
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+  
+  .master-card__services-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  /* Услуги в один столбик на телефоне */
+  .master-card__services-list {
+    grid-template-columns: 1fr;
+    gap: 6px 0;
+  }
+  
+  .master-card__services-list li {
+    font-size: 12px;
+    padding-left: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .master-card__image-wrapper {
+    width: 38%;
+    min-height: 220px;
+  }
+  
+  .master-card__info {
+    padding: 15px 15px 15px 15px;
+  }
+  
+  .master-card__name {
+    font-size: 22px;
+  }
+  
+  .master-card__description {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .master-card__services-list li {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .our-masters {
+    padding: 8px 15px 40px;
+    margin-top: -10px;
+  }
+  
+  .master-card__image-wrapper {
+    width: 35%;
+    min-height: 180px;
+  }
+  
+  .master-card__info {
+    padding: 12px 12px 12px 12px;
+  }
+  
+  .master-card__name {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  
+  .master-card__description {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  
+  .master-card__services-title {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  
+  .master-card__services-list li {
+    font-size: 10px;
+    padding-left: 16px;
+  }
+}
