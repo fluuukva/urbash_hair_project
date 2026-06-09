@@ -3,6 +3,7 @@ package by.urbash_hair.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,31 +38,27 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Публичные эндпоинты аутентификации
+                        .requestMatchers("/telegram/webhook").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        // Статические ресурсы
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/videos/**", "/static/**").permitAll()
                         .requestMatchers("/*.html", "/favicon.ico").permitAll()
-                        .requestMatchers("/", "/index.html", "/main.html", "/blog.html", "/work-with-us.html").permitAll()
-                        // Админские эндпоинты – временно открыты для всех (закомментирована проверка роли)
-                        // .requestMatchers("/api/admin/**").hasAnyRole(ROLE_ADMIN, ROLE_DATA_OFFICER)
-                        .requestMatchers("/api/admin/**").permitAll()
-                        // Клиентские эндпоинты
+                        .requestMatchers("/", "/index.html", "/main.html", "/admin.html", "/blog.html", "/work-with-us.html").permitAll()
+                        .requestMatchers("/api/admin/**").hasAnyRole(ROLE_ADMIN, ROLE_DATA_OFFICER)
                         .requestMatchers("/api/client/**").hasRole(ROLE_CLIENT)
-                        // Публичные API
                         .requestMatchers("/api/posts/**").permitAll()
                         .requestMatchers("/api/reviews/**").permitAll()
                         .requestMatchers("/api/services/**").permitAll()
                         .requestMatchers("/api/masters/**").permitAll()
-                        .requestMatchers("/api/appointments/**").permitAll()
+                        // Публичные эндпоинты для календаря
+                        .requestMatchers(HttpMethod.GET, "/api/appointments/available").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/appointments/all-by-month").permitAll()  // ← ДОБАВИТЬ ЭТУ СТРОКУ
+                        // Все остальные запросы к /api/appointments/** требуют аутентификации (POST, PUT, DELETE)
+                        .requestMatchers("/api/appointments/**").authenticated()
                         .requestMatchers("/api/course-applications/**").permitAll()
                         .requestMatchers("/api/job-applications/**").permitAll()
-                        // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
