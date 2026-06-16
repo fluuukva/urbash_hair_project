@@ -1,10 +1,7 @@
-/* modal_appointment.css */
-
-/* Базовые стили для всех модальных окон */
+/* ===== БАЗОВЫЕ СТИЛИ ДЛЯ ВСЕХ МОДАЛЬНЫХ ОКОН ===== */
 #appointment-modal.appointment-modal,
 #request-modal.appointment-modal,
 #registration-modal.appointment-modal {
-
   display: none;
   position: fixed;
   z-index: 1000;
@@ -24,7 +21,6 @@
 #appointment-modal.appointment-modal.is-visible,
 #request-modal.appointment-modal.is-visible,
 #registration-modal.appointment-modal.is-visible {
-
   opacity: 1;
   visibility: visible;
   display: flex;
@@ -33,7 +29,6 @@
 #appointment-modal .appointment-modal__content,
 #request-modal .appointment-modal__content,
 #registration-modal .appointment-modal__content {
-
   background-color: #1a1a1a;
   color: #f0f0f0;
   padding: 40px;
@@ -41,6 +36,8 @@
   position: relative;
   width: 90%;
   max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   transform: translateY(-20px);
   transition: transform 0.3s ease-out;
@@ -48,21 +45,15 @@
   box-sizing: border-box;
 }
 
-#request-modal .appointment-modal__content {
-  max-width: 600px;
-}
-
 #appointment-modal.is-visible .appointment-modal__content,
 #request-modal.is-visible .appointment-modal__content,
 #registration-modal.is-visible .appointment-modal__content {
-
   transform: translateY(0);
 }
 
 #appointment-modal .appointment-modal__title,
 #request-modal .appointment-modal__title,
 #registration-modal .appointment-modal__title {
-
   font-family: 'Playfair Display', serif;
   font-size: 2.2em;
   text-align: center;
@@ -74,7 +65,6 @@
 #appointment-modal .appointment-modal__close,
 #request-modal .appointment-modal__close,
 #registration-modal .appointment-modal__close {
-
   color: #e0b06b;
   position: absolute;
   top: 15px;
@@ -90,29 +80,21 @@
 }
 
 #appointment-modal .appointment-modal__close:hover,
-#appointment-modal .appointment-modal__close:focus,
 #request-modal .appointment-modal__close:hover,
-#request-modal .appointment-modal__close:focus,
-#registration-modal .appointment-modal__close:hover,
-#registration-modal .appointment-modal__close:focus {
-
+#registration-modal .appointment-modal__close:hover {
   color: #ffde94;
-  text-decoration: none;
-  outline: none;
 }
 
-/* Общие стили форм */
+/* ===== ФОРМЫ ===== */
 #appointment-modal .appointment-form .form-group,
 #request-modal .appointment-form .form-group,
 #registration-modal .appointment-form .form-group {
-
   margin-bottom: 25px;
 }
 
 #appointment-modal .appointment-form label,
 #request-modal .appointment-form label,
 #registration-modal .appointment-form label {
-
   display: block;
   margin-bottom: 10px;
   font-family: 'Montserrat', sans-serif;
@@ -123,16 +105,18 @@
 
 #appointment-modal .appointment-form input[type="text"],
 #appointment-modal .appointment-form input[type="tel"],
-#appointment-modal .appointment-form select,
 #appointment-modal .appointment-form input[type="email"],
+#appointment-modal .appointment-form select,
+#appointment-modal .appointment-form textarea,
 #request-modal .appointment-form input[type="text"],
 #request-modal .appointment-form input[type="tel"],
 #request-modal .appointment-form input[type="email"],
 #request-modal .appointment-form select,
+#request-modal .appointment-form textarea,
 #registration-modal .appointment-form input[type="text"],
 #registration-modal .appointment-form input[type="tel"],
-#registration-modal .appointment-form input[type="email"] {
-
+#registration-modal .appointment-form input[type="email"],
+#registration-modal .appointment-form select {
   width: 100%;
   padding: 14px 18px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -148,39 +132,22 @@
   appearance: none;
 }
 
-#appointment-modal .appointment-form input[type="text"]::placeholder,
-#appointment-modal .appointment-form input[type="tel"]::placeholder,
-#appointment-modal .appointment-form input[type="email"]::placeholder,
-#request-modal .appointment-form input[type="text"]::placeholder,
-#request-modal .appointment-form input[type="tel"]::placeholder,
-#request-modal .appointment-form input[type="email"]::placeholder,
-#registration-modal .appointment-form input[type="text"]::placeholder,
-#registration-modal .appointment-form input[type="tel"]::placeholder,
-#registration-modal .appointment-form input[type="email"]::placeholder {
-
-  color: #888;
-  opacity: 1;
-}
-
-#appointment-modal .appointment-form select option[value=""]:first-of-type,
-#request-modal .appointment-form select option[value=""]:first-of-type {
-  color: #888;
-  display: none;
-}
-
-#appointment-modal .appointment-form select:invalid,
-#request-modal .appointment-form select:invalid {
-  color: #888;
-}
-
-#appointment-modal .appointment-form select option,
-#request-modal .appointment-form select option {
-  background-color: #2a2a2a;
-  color: #f0f0f0;
+#appointment-modal .appointment-form input:focus,
+#request-modal .appointment-form input:focus,
+#registration-modal .appointment-form input:focus,
+#appointment-modal .appointment-form select:focus,
+#request-modal .appointment-form select:focus,
+#registration-modal .appointment-form select:focus,
+#appointment-modal .appointment-form textarea:focus,
+#request-modal .appointment-form textarea:focus {
+  border-color: #e0b06b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(224, 176, 107, 0.3);
 }
 
 #appointment-modal .appointment-form select,
-#request-modal .appointment-form select {
+#request-modal .appointment-form select,
+#registration-modal .appointment-form select {
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0b06b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
   background-repeat: no-repeat;
   background-position: right 15px center;
@@ -188,134 +155,15 @@
   padding-right: 40px;
 }
 
-#appointment-modal .appointment-form input[type="text"]:focus,
-#appointment-modal .appointment-form input[type="tel"]:focus,
-#appointment-modal .appointment-form input[type="email"]:focus,
-#appointment-modal .appointment-form select:focus,
-#request-modal .appointment-form input[type="text"]:focus,
-#request-modal .appointment-form input[type="tel"]:focus,
-#request-modal .appointment-form input[type="email"]:focus,
-#request-modal .appointment-form select:focus,
-#registration-modal .appointment-form input[type="text"]:focus,
-#registration-modal .appointment-form input[type="tel"]:focus,
-#registration-modal .appointment-form input[type="email"]:focus {
-
-  border-color: #e0b06b;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(224, 176, 107, 0.3);
+#appointment-modal .appointment-form textarea,
+#request-modal .appointment-form textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
-/* Стили для ползунка длины волос */
-#appointment-modal .appointment-form input[type="range"],
-#registration-modal .appointment-form input[type="range"] {
-
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 8px;
-  margin-top: 15px;
-  outline: none;
-  background: transparent;
-  cursor: grab;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-webkit-slider-runnable-track,
-#registration-modal .appointment-form input[type="range"]::-webkit-slider-runnable-track {
-
-  width: 100%;
-  height: 8px;
-  background: #3a3a3a;
-  border-radius: 5px;
-  border: none;
-  box-shadow: none;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-webkit-slider-thumb,
-#registration-modal .appointment-form input[type="range"]::-webkit-slider-thumb {
-
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #e0b06b;
-  cursor: grab;
-  border: 2px solid #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-  margin-top: -6px;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-moz-range-track,
-#registration-modal .appointment-form input[type="range"]::-moz-range-track {
-
-  width: 100%;
-  height: 8px;
-  background: #3a3a3a;
-  border-radius: 5px;
-  border: none;
-  box-shadow: none;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-moz-range-thumb,
-#registration-modal .appointment-form input[type="range"]::-moz-range-thumb {
-
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #e0b06b;
-  cursor: grab;
-  border: 2px solid #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-}
-
-#appointment-modal .appointment-form input[type="range"]::-ms-track,
-#registration-modal .appointment-form input[type="range"]::-ms-track {
-
-  width: 100%;
-  height: 8px;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-ms-fill-lower,
-#registration-modal .appointment-form input[type="range"]::-ms-fill-lower {
-
-  background: #3a3a3a;
-  border-radius: 5px;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-ms-fill-upper,
-#registration-modal .appointment-form input[type="range"]::-ms-fill-upper {
-
-  background: #3a3a3a;
-  border-radius: 5px;
-}
-
-#appointment-modal .appointment-form input[type="range"]::-ms-thumb,
-#registration-modal .appointment-form input[type="range"]::-ms-thumb {
-
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #e0b06b;
-  cursor: grab;
-  border: 2px solid #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-}
-
-#appointment-modal #hair-length-group label span,
-#registration-modal #hair-length-group label span {
-
-  font-weight: 600;
-  color: #e0b06b;
-}
-
-/* Кнопка отправки */
 #appointment-modal .appointment-form .button,
 #request-modal .appointment-form .button,
 #registration-modal .appointment-form .button {
-
   width: 100%;
   padding: 16px;
   background-color: #e0b06b;
@@ -334,64 +182,11 @@
 #appointment-modal .appointment-form .button:hover,
 #request-modal .appointment-form .button:hover,
 #registration-modal .appointment-form .button:hover {
-
   background-color: #ffde94;
   transform: translateY(-2px);
 }
 
-#appointment-modal .appointment-form .button:active,
-#request-modal .appointment-form .button:active,
-#registration-modal .appointment-form .button:active {
-
-  transform: translateY(0);
-}
-
-/* Стили для окна заявки (request-modal) */
-#request-modal .radio-group label {
-  display: inline-block;
-  margin-left: 8px;
-  color: #f0f0f0;
-  font-weight: 400;
-}
-
-#request-modal .radio-group input[type="radio"] {
-  accent-color: #e0b06b;
-  transform: scale(1.1);
-  margin-right: 5px;
-}
-
-#request-modal textarea {
-  background-color: #2a2a2a;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  color: #f0f0f0;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  padding: 12px 15px;
-  width: 100%;
-  box-sizing: border-box;
-  resize: vertical;
-}
-
-#request-modal textarea:focus {
-  border-color: #e0b06b;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(224, 176, 107, 0.3);
-}
-
-/* Сообщение об успешной отправке */
-.success-message {
-  background: rgba(224, 176, 107, 0.2);
-  border: 1px solid #e0b06b;
-  border-radius: 5px;
-  padding: 15px;
-  margin-top: 20px;
-  color: #e0b06b;
-  text-align: center;
-  font-weight: 600;
-}
-
-/* Календарь */
+/* ===== КАЛЕНДАРЬ ===== */
 #month-calendar {
   background: #1e1e1e;
   border-radius: 12px;
@@ -453,7 +248,8 @@
 .calendar-day.other-month {
   opacity: 0.4;
 }
-/* Кнопки слотов */
+
+/* ===== КНОПКИ СЛОТОВ ===== */
 .slots-list {
   display: flex;
   flex-wrap: wrap;
@@ -469,30 +265,343 @@
   font-weight: 600;
   cursor: pointer;
 }
-.slot-button:hover, .slot-button.active {
+.slot-button:hover,
+.slot-button.active {
   background: #D4AF37;
   color: #0A0A0A;
 }
-.form-group {
-  margin-bottom: 20px;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #FFD700;
-}
-.form-group select, .form-group input, .form-group textarea {
+
+/* ===== ПОЛЗУНОК ДЛИНЫ ===== */
+#appointment-modal .appointment-form input[type="range"],
+#registration-modal .appointment-form input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
-  padding: 12px;
-  background: #1e1e1e;
-  border: 1px solid #444;
-  border-radius: 8px;
-  color: #fff;
+  height: 8px;
+  margin-top: 15px;
+  outline: none;
+  background: transparent;
+  cursor: grab;
 }
-.button {
-  background: #D4AF37;
-  color: #0A0A0A;
-  padding: 12px 24px;
-  border-radius: 30px;
-  cursor: pointer;
+#appointment-modal .appointment-form input[type="range"]::-webkit-slider-runnable-track,
+#registration-modal .appointment-form input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  background: #3a3a3a;
+  border-radius: 5px;
+}
+#appointment-modal .appointment-form input[type="range"]::-webkit-slider-thumb,
+#registration-modal .appointment-form input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e0b06b;
+  cursor: grab;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  margin-top: -6px;
+}
+#appointment-modal .appointment-form input[type="range"]::-moz-range-track,
+#registration-modal .appointment-form input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: #3a3a3a;
+  border-radius: 5px;
+}
+#appointment-modal .appointment-form input[type="range"]::-moz-range-thumb,
+#registration-modal .appointment-form input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e0b06b;
+  cursor: grab;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+#appointment-modal .appointment-form input[type="range"]::-ms-track,
+#registration-modal .appointment-form input[type="range"]::-ms-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+#appointment-modal .appointment-form input[type="range"]::-ms-fill-lower,
+#registration-modal .appointment-form input[type="range"]::-ms-fill-lower {
+  background: #3a3a3a;
+  border-radius: 5px;
+}
+#appointment-modal .appointment-form input[type="range"]::-ms-fill-upper,
+#registration-modal .appointment-form input[type="range"]::-ms-fill-upper {
+  background: #3a3a3a;
+  border-radius: 5px;
+}
+#appointment-modal .appointment-form input[type="range"]::-ms-thumb,
+#registration-modal .appointment-form input[type="range"]::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e0b06b;
+  cursor: grab;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== ПРИМЕРНАЯ СТОИМОСТЬ ===== */
+#estimated-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFD700;
+  padding: 10px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  text-align: center;
+}
+.price-preview-note {
+  color: #aaa;
+  display: block;
+  margin-top: 5px;
+}
+
+/* ===== АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ (до 1024px) ===== */
+@media (max-width: 1024px) {
+  #appointment-modal .appointment-modal__content,
+  #request-modal .appointment-modal__content,
+  #registration-modal .appointment-modal__content {
+    padding: 30px 25px;
+    max-width: 92%;
+    max-height: 90vh;
+  }
+
+  #appointment-modal .appointment-modal__title {
+    font-size: 1.9em;
+    margin-bottom: 25px;
+  }
+
+  #appointment-modal .appointment-form .form-group {
+    margin-bottom: 20px;
+  }
+
+  #appointment-modal .appointment-form label {
+    font-size: 0.9em;
+  }
+
+  #appointment-modal .appointment-form input[type="text"],
+  #appointment-modal .appointment-form input[type="tel"],
+  #appointment-modal .appointment-form input[type="email"],
+  #appointment-modal .appointment-form select,
+  #appointment-modal .appointment-form textarea {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  .calendar-header span {
+    font-size: 17px;
+  }
+  .calendar-day {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .slot-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  #estimated-price {
+    font-size: 22px;
+    padding: 8px;
+  }
+
+  #appointment-modal .appointment-form .button {
+    padding: 14px;
+    font-size: 1em;
+  }
+}
+
+/* ===== АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ ПОМЕНЬШЕ (до 768px) ===== */
+@media (max-width: 768px) {
+  #appointment-modal .appointment-modal__content,
+  #request-modal .appointment-modal__content,
+  #registration-modal .appointment-modal__content {
+    padding: 20px 18px;
+    max-width: 94%;
+    max-height: 90vh;
+  }
+
+  #appointment-modal .appointment-modal__title {
+    font-size: 1.7em;
+    margin-bottom: 20px;
+  }
+
+  #appointment-modal .appointment-modal__close {
+    font-size: 30px;
+    top: 12px;
+    right: 18px;
+  }
+
+  #appointment-modal .appointment-form .form-group {
+    margin-bottom: 16px;
+  }
+
+  #appointment-modal .appointment-form label {
+    font-size: 0.85em;
+    margin-bottom: 6px;
+  }
+
+  #appointment-modal .appointment-form input[type="text"],
+  #appointment-modal .appointment-form input[type="tel"],
+  #appointment-modal .appointment-form input[type="email"],
+  #appointment-modal .appointment-form select,
+  #appointment-modal .appointment-form textarea {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .calendar-header span {
+    font-size: 16px;
+  }
+  .calendar-weekdays div {
+    font-size: 12px;
+    padding: 6px 0;
+  }
+  .calendar-day {
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .calendar-days {
+    gap: 4px;
+  }
+
+  .slots-list {
+    gap: 8px;
+  }
+  .slot-button {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  #estimated-price {
+    font-size: 20px;
+    padding: 6px;
+  }
+
+  #appointment-modal .appointment-form .button {
+    padding: 12px;
+    font-size: 0.95em;
+  }
+
+  #appointment-modal .appointment-form input[type="range"] {
+    height: 6px;
+    margin-top: 10px;
+  }
+  #appointment-modal .appointment-form input[type="range"]::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    margin-top: -4px;
+  }
+}
+
+/* ===== АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ (до 480px) ===== */
+@media (max-width: 480px) {
+  #appointment-modal .appointment-modal__content,
+  #request-modal .appointment-modal__content,
+  #registration-modal .appointment-modal__content {
+    padding: 14px 12px !important;
+    max-width: 96% !important;
+    max-height: 92vh !important;
+  }
+
+  #appointment-modal .appointment-modal__title {
+    font-size: 1.3em !important;
+    margin-bottom: 14px !important;
+  }
+
+  #appointment-modal .appointment-modal__close {
+    font-size: 24px !important;
+    top: 6px;
+    right: 12px;
+  }
+
+  #appointment-modal .appointment-form .form-group {
+    margin-bottom: 10px !important;
+  }
+
+  #appointment-modal .appointment-form label {
+    font-size: 0.75em !important;
+    margin-bottom: 4px !important;
+  }
+
+  #appointment-modal .appointment-form input[type="text"],
+  #appointment-modal .appointment-form input[type="tel"],
+  #appointment-modal .appointment-form input[type="email"],
+  #appointment-modal .appointment-form select,
+  #appointment-modal .appointment-form textarea {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+  }
+
+  #month-calendar {
+    padding: 6px !important;
+  }
+  .calendar-header span {
+    font-size: 14px !important;
+  }
+  .calendar-weekdays div {
+    font-size: 11px !important;
+    padding: 2px 0 !important;
+  }
+  .calendar-day {
+    padding: 4px 0 !important;
+    font-size: 12px !important;
+  }
+  .calendar-days {
+    gap: 2px !important;
+  }
+
+  .slots-list {
+    gap: 6px !important;
+  }
+  .slot-button {
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+  }
+
+  #estimated-price {
+    font-size: 18px !important;
+    padding: 4px !important;
+  }
+  .price-preview-note {
+    font-size: 10px !important;
+  }
+
+  #appointment-modal .appointment-form .button {
+    padding: 8px 12px !important;
+    font-size: 0.9em !important;
+  }
+
+  #appointment-modal .appointment-form input[type="range"] {
+    height: 4px !important;
+    margin-top: 8px !important;
+  }
+  #appointment-modal .appointment-form input[type="range"]::-webkit-slider-thumb {
+    width: 14px !important;
+    height: 14px !important;
+    margin-top: -4px !important;
+  }
+
+  #hair-length-value {
+    font-size: 13px !important;
+  }
+  #hair-density-select {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+  }
+
+  /* Для регистрации, если используется */
+  #registration-modal .auth-step .form-group {
+    margin-bottom: 10px !important;
+  }
 }

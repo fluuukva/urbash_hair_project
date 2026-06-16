@@ -343,6 +343,55 @@ public class AdminApiController {
                     Master savedMaster = masterRepository.save(master);
                     auditLogService.log(getUserId(principal), "SAVE_MASTER", "Saved master " + savedMaster.getId());
                     return ResponseEntity.ok(savedMaster);
+
+                // ===== ДОБАВЛЯЕМ ОБРАБОТКУ ЗАПИСЕЙ (аппойнтменты) =====
+                case "appointments":
+                    Appointment app = new Appointment();
+                    if (payload.get("id") != null) {
+                        Long id = Long.valueOf(payload.get("id").toString());
+                        Optional<Appointment> existingApp = appointmentRepository.findById(id);
+                        if (existingApp.isPresent()) {
+                            app = existingApp.get();
+                        }
+                    }
+                    // Заполняем поля
+                    if (payload.get("date") != null) app.setDate((String) payload.get("date"));
+                    if (payload.get("time") != null) app.setTime((String) payload.get("time"));
+                    if (payload.get("status") != null) app.setStatus((String) payload.get("status"));
+                    if (payload.get("notes") != null) app.setNotes((String) payload.get("notes"));
+
+                    // Мастер
+                    if (payload.get("masterId") != null) {
+                        Long masterId = Long.valueOf(payload.get("masterId").toString());
+                        masterRepository.findById(masterId).ifPresent(app::setMaster);
+                    }
+                    // Услуга
+                    if (payload.get("serviceId") != null) {
+                        Long serviceId = Long.valueOf(payload.get("serviceId").toString());
+                        serviceRepository.findById(serviceId).ifPresent(app::setService);
+                    }
+                    // Клиент
+                    if (payload.get("clientId") != null) {
+                        Long clientId = Long.valueOf(payload.get("clientId").toString());
+                        clientRepository.findById(clientId).ifPresent(app::setClient);
+                    }
+
+                    // Проверка конфликта (если мастер и время заданы)
+                    if (app.getMaster() != null && app.getDate() != null && app.getTime() != null) {
+                        Long masterId = app.getMaster().getId();
+                        String date = app.getDate();
+                        String time = app.getTime();
+                        Long excludeId = app.getId(); // при редактировании исключаем самого себя
+                        // Длительность 120 минут (2 часа)
+                        if (appointmentService.hasSlotConflict(masterId, date, time, 120, excludeId)) {
+                            throw new RuntimeException("На это время уже есть слот у данного мастера");
+                        }
+                    }
+
+                    Appointment savedApp = appointmentRepository.save(app);
+                    auditLogService.log(getUserId(principal), "SAVE_APPOINTMENT", "Saved appointment " + savedApp.getId());
+                    return ResponseEntity.ok(savedApp);
+
                 default:
                     return ResponseEntity.badRequest().body("Unknown table: " + table);
             }

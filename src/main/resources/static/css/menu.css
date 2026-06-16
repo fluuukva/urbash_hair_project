@@ -112,3 +112,15 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ПЕРЕОПРЕДЕЛЕНИЕ КОНФЛИКТУЮЩИХ СТИЛЕЙ ИЗ HTML */
+@media (max-width: 992px) {
+  .main-nav .nav-list {
+    flex-direction: column !important;
+    gap: 0 !important;
+    align-items: stretch !important;
+  }
+  .header-inline-menu {
+    display: none !important;
+  }
+}

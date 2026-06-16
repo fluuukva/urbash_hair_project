@@ -64,10 +64,9 @@
       gap: 20px;
     }
     
-    /* Растягиваем меню в шапке: увеличиваем расстояние между ссылками */
     .header-inline-menu {
       display: flex;
-      gap: 2.8rem;          /* увеличенное расстояние между ссылками */
+      gap: 2.8rem;
       flex-wrap: wrap;
       align-items: center;
     }
@@ -79,7 +78,6 @@
       transition: color 0.2s;
     }
     
-    /* Также растягиваем основное навигационное меню (Главная, Работа с нами, Блог, Записаться) */
     .main-nav .nav-list {
       display: flex;
       gap: 2.2rem;
@@ -89,7 +87,6 @@
       padding: 0;
     }
     
-    /* Для адаптива на средних экранах */
     @media (max-width: 1200px) {
       :root {
         --side-padding: 30px;
@@ -169,7 +166,7 @@
       padding-right: var(--side-padding);
     }
     
-    /* остальные стили для модалок, календаря, кнопок (без изменений) */
+    /* остальные стили для модалок, календаря, кнопок */
     .slots-list {
       display: flex;
       flex-wrap: wrap;
@@ -294,6 +291,20 @@
       opacity: 0.5;
       background: #1a1a1a;
       pointer-events: none;
+    }
+    #estimated-price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #FFD700;
+      padding: 10px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .price-preview-note {
+      color: #aaa;
+      display: block;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -477,7 +488,7 @@
   </div>
 </section>
 
-<!-- МОДАЛЬНОЕ ОКНО ЗАПИСИ (календарь месяца + слоты) -->
+<!-- МОДАЛЬНОЕ ОКНО ЗАПИСИ (календарь месяца + слоты + расчёт стоимости) -->
 <div class="appointment-modal" id="appointment-modal">
   <div class="appointment-modal__content">
     <button class="appointment-modal__close" id="close-modal-btn">&times;</button>
@@ -505,6 +516,34 @@
       <div id="slots-container" class="form-group" style="display: none;">
         <label>Доступное время</label>
         <div id="slots-list" class="slots-list"></div>
+      </div>
+
+      <!-- Поля для расчёта стоимости -->
+      <div class="form-group">
+        <label>Длина волос</label>
+        <input type="range" id="hair-length-slider" min="30" max="85" step="5" value="30" style="width:100%;">
+        <div style="display:flex; justify-content:space-between; color:#aaa; font-size:0.8rem;">
+          <span>30 см</span>
+          <span id="hair-length-value">30 см</span>
+          <span>85 см</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Густота волос (доплата)</label>
+        <select id="hair-density-select" style="width:100%; padding:12px; background:#1e1e1e; border:1px solid #444; border-radius:8px; color:#fff;">
+          <option value="0">Стандартная (до 6 см) — без доплаты</option>
+          <option value="7">7–8 см — +30 BYN</option>
+          <option value="9">9–10 см — +40 BYN</option>
+          <option value="12">10–12 см — +60 BYN</option>
+        </select>
+      </div>
+
+      <!-- Блок с примерной стоимостью -->
+      <div class="form-group">
+        <label>Примерная стоимость</label>
+        <div id="estimated-price">0 BYN</div>
+        <small class="price-preview-note">* Точная стоимость может быть скорректирована мастером</small>
       </div>
 
       <div class="form-group">
@@ -681,38 +720,69 @@
         <form class="appointment-form" id="auth-form">
             <div id="step-phone" class="auth-step">
                 <div id="registration-fields">
-                    <div class="form-group">
-                        <label for="auth-fullname">ФИО <span style="color:#e0b06b;">*</span></label>
-                        <input type="text" id="auth-fullname" name="fullname" placeholder="Иванов Иван Иванович">
-                    </div>
-                    <div class="form-group">
-                        <label for="auth-email">Email</label>
-                        <input type="email" id="auth-email" name="email" placeholder="ivan@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="delivery-method">Получить код</label>
-                        <select id="delivery-method" name="deliveryMethod">
-                            <option value="EMAIL">На email</option>
-                            <option value="TELEGRAM">В Telegram</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="telegram-id-group" style="display: none;">
-                        <label for="telegram-id">Telegram username</label>
-                        <input type="text" id="telegram-id" name="telegramId" placeholder="@username">
-                        <div style="margin-top: 8px;">
-                            <a href="https://t.me/urbash_hair_bot" target="_blank" class="telegram-start-link" style="color: #D4AF37; text-decoration: none;">
-                                👉 Начать диалог с ботом
-                            </a>
+                    <!-- РЕГИСТРАЦИЯ (видна по умолчанию) -->
+                    <div id="register-fields" style="display: block;">
+                        <div class="form-group">
+                            <label for="auth-fullname">ФИО <span style="color:#e0b06b;">*</span></label>
+                            <input type="text" id="auth-fullname" name="fullname" placeholder="Иванов Иван Иванович">
                         </div>
-                        <small style="color: #aaa; display: block; margin-top: 6px;">Укажите ваш публичный username (с @). Бот должен быть запущен командой /start.</small>
+                        <div class="form-group">
+                            <label for="auth-phone">Телефон <span style="color:#e0b06b;">*</span></label>
+                            <input type="tel" id="auth-phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="auth-email">Email</label>
+                            <input type="email" id="auth-email" name="email" placeholder="ivan@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-method">Получить код</label>
+                            <select id="delivery-method" name="deliveryMethod">
+                                <option value="EMAIL">На email</option>
+                                <option value="TELEGRAM">В Telegram</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="telegram-id-group" style="display: none;">
+                            <label for="telegram-id">Telegram username</label>
+                            <input type="text" id="telegram-id" name="telegramId" placeholder="@username">
+                            <div style="margin-top: 8px;">
+                                <a href="https://t.me/urbash_hair_bot" target="_blank" class="telegram-start-link" style="color: #D4AF37; text-decoration: none;">
+                                    👉 Начать диалог с ботом
+                                </a>
+                            </div>
+                            <small style="color: #aaa; display: block; margin-top: 6px;">Укажите ваш публичный username (с @). Бот должен быть запущен командой /start.</small>
+                        </div>
                     </div>
+
+                    <!-- ВХОД (скрыт по умолчанию) – только EMAIL + выбор способа доставки, БЕЗ ТЕЛЕФОНА -->
+<!-- ВХОД (скрыт по умолчанию) -->
+                  <div id="login-fields" style="display: none;">
+                      <div class="form-group">
+                          <label for="login-email">Email <span style="color:#e0b06b;">*</span></label>
+                          <input type="email" id="login-email" name="loginEmail" placeholder="ivan@example.com" required>
+                          <small style="color: #aaa; display: block; margin-top: 4px;">Введите email, указанный при регистрации</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="login-delivery-method">Получить код</label>
+                          <select id="login-delivery-method" name="loginDeliveryMethod">
+                              <option value="EMAIL">На email</option>
+                              <option value="TELEGRAM">В Telegram</option>
+                          </select>
+                      </div>
+                      <div class="form-group" id="login-telegram-group" style="display: none;">
+                          <label for="login-telegram-id">Telegram username</label>
+                          <input type="text" id="login-telegram-id" name="loginTelegramId" placeholder="@username">
+                          <small style="color: #aaa; display: block; margin-top: 4px;">Введите ваш Telegram username (с @), указанный при регистрации</small>
+                      </div>
+                      <!-- Телефон скрыт -->
+                      <div style="display: none;">
+                          <input type="hidden" id="auth-phone" name="phone" value="">
+                      </div>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label for="auth-phone">Телефон <span style="color:#e0b06b;">*</span></label>
-                    <input type="tel" id="auth-phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
-                </div>
+
                 <button type="button" class="button" id="send-code-btn">Получить код</button>
             </div>
+
             <div id="step-code" class="auth-step" style="display: none;">
                 <div class="form-group">
                     <label for="auth-code">Код из сообщения</label>

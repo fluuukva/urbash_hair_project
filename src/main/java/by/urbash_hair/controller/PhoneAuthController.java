@@ -30,65 +30,95 @@ public class PhoneAuthController {
     private final JwtService jwtService;
     private final HashUtils hashUtils;
     private final EmailService emailService;
-    private final TelegramPollingBot telegramPollingBot;   // используем polling бота
+    private final Optional<TelegramPollingBot> telegramPollingBot;
 
     @Value("${app.allow.delivery:all}")
     private String allowDelivery;
 
     @PostMapping("/send-code")
-    public String sendCode(@Valid @RequestBody SendCodeRequest request) {
-        String phone = request.getPhone();
-        String deliveryMethod = request.getDeliveryMethod();
-        String code = String.format("%06d", new Random().nextInt(999999));
+public String sendCode(@Valid @RequestBody SendCodeRequest request) {
+    String deliveryMethod = request.getDeliveryMethod();
+    String code = String.format("%06d", new Random().nextInt(999999));
+    Client client = null;
 
-        String phoneHash = hashUtils.hashPhone(phone);
-        Client client = clientRepository.findByPhoneHash(phoneHash).orElse(null);
-        if (client == null) {
-            client = Client.builder()
-                    .phone(phone)
-                    .phoneHash(phoneHash)
-                    .build();
-        }
-
-        String key = phone + ":" + deliveryMethod;
-        smsCodeService.saveCode(key, code);
-
-        switch (deliveryMethod) {
-            case "SMS":
-                System.out.println("=== ОТПРАВКА КОДА (SMS) ===");
-                System.out.println("Номер: " + phone);
-                System.out.println("Код: " + code);
-                System.out.println("==========================");
-                break;
-
-            case "EMAIL":
-                String emailTo = request.getEmail();
-                if (emailTo == null || emailTo.isBlank()) {
-                    throw new RuntimeException("Для отправки кода на email укажите email");
-                }
-                emailService.sendVerificationCode(emailTo, code);
-                break;
-
-            case "TELEGRAM":
-                String input = request.getTelegramId();
-                if (input == null || input.isBlank()) {
-                    throw new RuntimeException("Укажите ваш Telegram username (начинается с @)");
-                }
-                Long chatId = telegramPollingBot.getChatIdByUsername(input);
-                if (chatId == null) {
-                    throw new RuntimeException("Не удалось найти пользователя по username: " + input +
-                            ". Убедитесь, что вы отправили команду /start нашему боту @" + telegramPollingBot.getBotUsername() +
-                            " и ваш username публичный.");
-                }
-                telegramPollingBot.sendVerificationCode(chatId, code);
-                break;
-
-            default:
-                throw new RuntimeException("Неизвестный способ доставки: " + deliveryMethod);
-        }
-
-        return "Код отправлен на " + deliveryMethod;
+    // Поиск клиента по email (для входа) или по телефону (для регистрации)
+    if (request.getEmail() != null && !request.getEmail().isBlank()) {
+        String emailHash = hashUtils.hashEmail(request.getEmail());
+        client = clientRepository.findByEmailHash(emailHash).orElse(null);
+    } else if (request.getPhone() != null && !request.getPhone().isBlank()) {
+        String phoneHash = hashUtils.hashPhone(request.getPhone());
+        client = clientRepository.findByPhoneHash(phoneHash).orElse(null);
+    } else if (request.getTelegramId() != null && !request.getTelegramId().isBlank()) {
+        client = clientRepository.findByTelegramId(request.getTelegramId()).orElse(null);
     }
+
+    // Если клиент не найден, но передан телефон – создаём временного клиента (для регистрации)
+    if (client == null && request.getPhone() != null && !request.getPhone().isBlank()) {
+        client = Client.builder()
+                .phone(request.getPhone())
+                .phoneHash(hashUtils.hashPhone(request.getPhone()))
+                .build();
+    }
+
+    if (client == null) {
+        throw new RuntimeException("Пользователь не найден. Пожалуйста, зарегистрируйтесь.");
+    }
+
+    // Формируем ключ для хранения кода
+    String key;
+    if (request.getPhone() != null && !request.getPhone().isBlank()) {
+        key = request.getPhone() + ":" + deliveryMethod;
+    } else if (request.getEmail() != null && !request.getEmail().isBlank()) {
+        key = request.getEmail() + ":" + deliveryMethod;
+    } else {
+        key = request.getTelegramId() + ":" + deliveryMethod;
+    }
+    smsCodeService.saveCode(key, code);
+
+    switch (deliveryMethod) {
+        case "SMS":
+            System.out.println("=== ОТПРАВКА КОДА (SMS) ===");
+            System.out.println("Номер: " + request.getPhone());
+            System.out.println("Код: " + code);
+            System.out.println("==========================");
+            break;
+
+        case "EMAIL":
+            String emailTo = request.getEmail();
+            if (emailTo == null || emailTo.isBlank()) {
+                throw new RuntimeException("Для отправки кода на email укажите email");
+            }
+            emailService.sendVerificationCode(emailTo, code);
+            break;
+
+        case "TELEGRAM":
+            String input = request.getTelegramId();
+            if (input == null || input.isBlank()) {
+                throw new RuntimeException("Укажите ваш Telegram username (начинается с @)");
+            }
+            if (telegramPollingBot.isEmpty()) {
+                System.out.println("=== ТЕЛЕГРАМ БОТ НЕДОСТУПЕН (локальный режим) ===");
+                System.out.println("Код для пользователя " + input + ": " + code);
+                System.out.println("================================================");
+                break;
+            }
+            Long chatId = telegramPollingBot.get().getChatIdByUsername(input);
+            if (chatId == null) {
+                System.out.println("=== ПОЛЬЗОВАТЕЛЬ НЕ НАЙДЕН В ТЕЛЕГРАМ ===");
+                System.out.println("Username: " + input);
+                System.out.println("Код: " + code);
+                System.out.println("=========================================");
+                break;
+            }
+            telegramPollingBot.get().sendVerificationCode(chatId, code);
+            break;
+
+        default:
+            throw new RuntimeException("Неизвестный способ доставки: " + deliveryMethod);
+    }
+
+    return "Код отправлен на " + deliveryMethod;
+}
 
     @PostMapping("/verify-code")
     public AuthResponse verifyCode(@Valid @RequestBody VerifyCodeRequest request) {
@@ -96,22 +126,69 @@ public class PhoneAuthController {
         String code = request.getCode();
         String deliveryMethod = request.getDeliveryMethod();
 
-        String key = phone + ":" + deliveryMethod;
+        // Формируем ключ для проверки кода
+        String key;
+        if (phone != null && !phone.isBlank()) {
+            key = phone + ":" + deliveryMethod;
+        } else if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            key = request.getEmail() + ":" + deliveryMethod;
+        } else {
+            key = request.getTelegramId() + ":" + deliveryMethod;
+        }
         boolean valid = smsCodeService.verifyCode(key, code);
         if (!valid) {
             throw new RuntimeException("Неверный или просроченный код");
         }
 
-        if (!request.isConsentGiven()) {
-            throw new ConsentRequiredException("Необходимо дать согласие на обработку персональных данных");
+        String phoneHash = phone != null && !phone.isBlank() ? hashUtils.hashPhone(phone) : null;
+        Client client = null;
+
+        // Поиск клиента по телефону, email или telegramId
+        if (phoneHash != null) {
+            Optional<Client> existingClient = clientRepository.findByPhoneHash(phoneHash);
+            if (existingClient.isPresent()) client = existingClient.get();
+        }
+        if (client == null && request.getEmail() != null && !request.getEmail().isBlank()) {
+            String emailHash = hashUtils.hashEmail(request.getEmail());
+            Optional<Client> existingClient = clientRepository.findByEmailHash(emailHash);
+            if (existingClient.isPresent()) client = existingClient.get();
+        }
+        if (client == null && request.getTelegramId() != null && !request.getTelegramId().isBlank()) {
+            Optional<Client> existingClient = clientRepository.findByTelegramId(request.getTelegramId());
+            if (existingClient.isPresent()) client = existingClient.get();
         }
 
-        String phoneHash = hashUtils.hashPhone(phone);
-        Optional<Client> existingClient = clientRepository.findByPhoneHash(phoneHash);
-        Client client;
-
-        if (existingClient.isPresent()) {
-            client = existingClient.get();
+        if (client == null) {
+            // Новый пользователь – создаём
+            if (!request.isConsentGiven()) {
+                throw new ConsentRequiredException("Необходимо дать согласие на обработку персональных данных");
+            }
+            Client newClient = Client.builder()
+                    .phone(phone)
+                    .phoneHash(phoneHash)
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .middleName(request.getMiddleName())
+                    .email(request.getEmail())
+                    .telegramId(request.getTelegramId())
+                    .preferredDelivery(request.getPreferredDelivery())
+                    .dataProcessingConsent(true)
+                    .consentGivenAt(LocalDateTime.now())
+                    .build();
+            if (request.getEmail() != null && !request.getEmail().isBlank()) {
+                newClient.setEmailHash(hashUtils.hashEmail(request.getEmail()));
+            }
+            client = clientRepository.save(newClient);
+        } else {
+            // Существующий пользователь – обновляем
+            if (Boolean.FALSE.equals(client.getDataProcessingConsent())) {
+                if (!request.isConsentGiven()) {
+                    throw new ConsentRequiredException("Необходимо дать согласие на обработку персональных данных");
+                } else {
+                    client.setDataProcessingConsent(true);
+                    client.setConsentGivenAt(LocalDateTime.now());
+                }
+            }
             if (request.getFirstName() != null && !request.getFirstName().isBlank()) {
                 client.setFirstName(request.getFirstName());
             }
@@ -131,28 +208,7 @@ public class PhoneAuthController {
             if (request.getPreferredDelivery() != null && !request.getPreferredDelivery().isBlank()) {
                 client.setPreferredDelivery(request.getPreferredDelivery());
             }
-            if (Boolean.FALSE.equals(client.getDataProcessingConsent())) {
-                client.setDataProcessingConsent(true);
-                client.setConsentGivenAt(LocalDateTime.now());
-            }
             client = clientRepository.save(client);
-        } else {
-            Client newClient = Client.builder()
-                    .phone(phone)
-                    .phoneHash(phoneHash)
-                    .firstName(request.getFirstName())
-                    .lastName(request.getLastName())
-                    .middleName(request.getMiddleName())
-                    .email(request.getEmail())
-                    .telegramId(request.getTelegramId())
-                    .preferredDelivery(request.getPreferredDelivery())
-                    .dataProcessingConsent(true)
-                    .consentGivenAt(LocalDateTime.now())
-                    .build();
-            if (request.getEmail() != null && !request.getEmail().isBlank()) {
-                newClient.setEmailHash(hashUtils.hashEmail(request.getEmail()));
-            }
-            client = clientRepository.save(newClient);
         }
 
         smsCodeService.removeCode(key);

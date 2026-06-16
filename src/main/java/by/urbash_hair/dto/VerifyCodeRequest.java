@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class VerifyCodeRequest {
-    @NotBlank(message = "Номер телефона обязателен")
+    // Телефон теперь НЕ обязателен
     private String phone;
 
     @NotBlank(message = "Код подтверждения обязателен")
@@ -18,13 +18,9 @@ public class VerifyCodeRequest {
     private String middleName;
     private String email;
 
-    // Способ доставки, который использовался при отправке кода
     @NotBlank(message = "Способ доставки обязателен")
     private String deliveryMethod;
 
-    // Если пользователь выбрал TELEGRAM и хочет сохранить Telegram ID
     private String telegramId;
-
-    // Способ, который пользователь предпочитает для будущих входов
     private String preferredDelivery;
 }

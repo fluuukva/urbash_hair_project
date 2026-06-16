@@ -1,4 +1,4 @@
-// main.js – финальная версия с авторизацией
+// main.js – финальная версия с автообновлением календаря при смене мастера/услуги
 let currentDate = new Date();
 let selectedDateStr = null;
 let currentSelectedSlotId = null;
@@ -14,6 +14,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const notesInput = document.getElementById('notes');
     const hiddenSlotId = document.getElementById('selected-slot-id');
     const hiddenDate = document.getElementById('selected-date');
+
+    // Поля для расчёта стоимости
+    const hairLengthSlider = document.getElementById('hair-length-slider');
+    const hairLengthValue = document.getElementById('hair-length-value');
+    const hairDensitySelect = document.getElementById('hair-density-select');
+    const estimatedPriceEl = document.getElementById('estimated-price');
+
+    // === ФУНКЦИЯ РАСЧЁТА ПРИМЕРНОЙ СТОИМОСТИ ===
+    function updatePriceEstimate() {
+        const serviceId = serviceSelect.value;
+        const hairLength = parseInt(hairLengthSlider ? hairLengthSlider.value : 30);
+        const hairDensity = parseInt(hairDensitySelect ? hairDensitySelect.value : 0);
+
+        if (!serviceId) {
+            estimatedPriceEl.textContent = '0 BYN';
+            return;
+        }
+
+        const serviceOption = serviceSelect.options[serviceSelect.selectedIndex];
+        const serviceName = serviceOption ? serviceOption.text : '';
+
+        let basePrice = 0;
+        let length = Math.min(85, Math.max(30, hairLength));
+        let density = hairDensity || 0;
+
+        if (serviceName.includes('Кератин') || serviceName.includes('Ботокс')) {
+            let extraCm = (length - 30) / 5;
+            basePrice = 90 + extraCm * 10;
+        } else if (serviceName.includes('Холодное') || serviceName.includes('восстановление')) {
+            let extraCm = (length - 30) / 5;
+            basePrice = 50 + extraCm * 10;
+        } else if (serviceName.includes('Обучение') || serviceName.includes('Курсы')) {
+            estimatedPriceEl.textContent = '300 BYN';
+            return;
+        } else {
+            estimatedPriceEl.textContent = '0 BYN';
+            return;
+        }
+
+        let densitySurcharge = 0;
+        if (density >= 7 && density <= 8) densitySurcharge = 30;
+        else if (density >= 9 && density <= 10) densitySurcharge = 40;
+        else if (density >= 10 && density <= 12) densitySurcharge = 60;
+
+        let total = basePrice + densitySurcharge;
+        estimatedPriceEl.textContent = total + ' BYN';
+    }
+
+    // Обновление отображения длины
+    if (hairLengthSlider && hairLengthValue) {
+        hairLengthSlider.addEventListener('input', () => {
+            hairLengthValue.textContent = hairLengthSlider.value + ' см';
+            updatePriceEstimate();
+        });
+    }
+
+    if (hairDensitySelect) {
+        hairDensitySelect.addEventListener('change', updatePriceEstimate);
+    }
 
     // Загрузка мастеров (публичный эндпоинт)
     async function loadMasters() {
@@ -42,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = s.name;
                 serviceSelect.appendChild(opt);
             });
+            updatePriceEstimate();
         } catch (e) { console.error(e); }
     }
 
@@ -90,11 +150,19 @@ document.addEventListener('DOMContentLoaded', () => {
         slotsContainer.style.display = 'block';
     }
 
-    // Календарь месяца: если есть хотя бы один AVAILABLE слот => день активный,
-    // если слоты есть, но нет AVAILABLE (только BOOKED/CONFIRMED/CANCELLED) => has-booked,
-    // если нет слотов => disabled
-    async function renderCalendar(year, month) {
+    // ===== ФУНКЦИЯ ОБНОВЛЕНИЯ КАЛЕНДАРЯ (сброс и перерисовка) =====
+    function refreshCalendar() {
+        // Сбрасываем выбранную дату, слоты и скрытые поля
+        selectedDateStr = null;
+        slotsContainer.style.display = 'none';
+        hiddenSlotId.value = '';
+        hiddenDate.value = '';
+        // Принудительно перерисовываем календарь по текущему месяцу
+        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    }
 
+    // Календарь месяца (с индикацией доступности)
+    async function renderCalendar(year, month) {
         const firstDay = new Date(year, month, 1);
         let startDayOfWeek = firstDay.getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -103,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedMasterId = masterSelect.value;
         const selectedServiceId = serviceSelect.value ? serviceSelect.value : null;
 
-        const slotsByDate = new Map(); // dateStr -> { hasAvailable: boolean, hasAny: boolean }
+        const slotsByDate = new Map();
 
         try {
             if (selectedMasterId) {
@@ -119,11 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     allSlots.forEach(slot => {
                         const dateStr = slot.date;
                         if (!dateStr) return;
-
                         if (!slotsByDate.has(dateStr)) {
                             slotsByDate.set(dateStr, { hasAvailable: false, hasAny: false });
                         }
-
                         const info = slotsByDate.get(dateStr);
                         info.hasAny = true;
                         if (slot.status === 'AVAILABLE') info.hasAvailable = true;
@@ -133,33 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
             console.error('Failed to load all-by-month:', e);
         }
-
-        // DEBUG: статусы слотов по дням
-        try {
-            const debugSlotsByDate = {};
-            if (slotsByDate && typeof slotsByDate.forEach === 'function') {
-                slotsByDate.forEach((value, key) => {
-                    debugSlotsByDate[key] = { ...value, statuses: undefined };
-                });
-            }
-
-            console.group('DEBUG /api/appointments/all-by-month result');
-            // Воссоздаём список статусов по фактическим слотам через повторный запрос не делаем,
-            // но выводим вычисленные флаги по дням.
-            console.log('dates in slotsByDate =', Array.from(slotsByDate.keys()).length);
-            Array.from(slotsByDate.entries()).forEach(([dateStr, info]) => {
-                console.log(dateStr,
-                    'hasAvailable=', info.hasAvailable,
-                    'hasBooked=', !info.hasAvailable && info.hasAny,
-                    'hasAnySlot=', info.hasAny
-                );
-            });
-            console.groupEnd();
-        } catch (err) {
-            console.warn('DEBUG slotsByDate failed:', err);
-        }
-
-
 
         let calendarHtml = `
             <div class="calendar-header">
@@ -183,20 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let d = 1; d <= daysInMonth; d++) {
             let dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const info = slotsByDate.get(dateStr);
-
             let className = '';
-            if (!info || !info.hasAny) {
-                className = 'disabled';
-            } else if (info.hasAvailable) {
-                className = '';
-            } else {
-                className = 'has-booked';
-            }
-
+            if (!info || !info.hasAny) className = 'disabled';
+            else if (info.hasAvailable) className = '';
+            else className = 'has-booked';
             daysHtml += `<div class="calendar-day ${className}" data-date="${dateStr}">${d}</div>`;
         }
-
-        // inline styles for calendar-day status (to match requirement)
         const styleId = 'calendar-day-status-style';
         if (!document.getElementById(styleId)) {
             const style = document.createElement('style');
@@ -205,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
 .calendar-day.disabled { opacity: 0.3; pointer-events: none; }`;
             document.head.appendChild(style);
         }
-
         let totalCells = 42;
         let currentCells = startOffset + daysInMonth;
         let remaining = totalCells - currentCells;
@@ -224,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 selectedDateStr = date;
                 loadSlotsForDate(date);
             });
-
         });
 
         document.getElementById('prev-month').addEventListener('click', () => {
@@ -256,12 +285,17 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedDateStr = null;
             currentDate = new Date();
             renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+            if (hairLengthSlider) hairLengthSlider.value = 30;
+            if (hairLengthValue) hairLengthValue.textContent = '30 см';
+            if (hairDensitySelect) hairDensitySelect.value = 0;
+            updatePriceEstimate();
             modal.classList.add('is-visible');
             document.body.style.overflow = 'hidden';
             const serviceType = btn.dataset.service;
             if (serviceType) {
                 const map = { keratin: '1', botox: '2', recovery: '3', courses: '4' };
                 if (map[serviceType]) serviceSelect.value = map[serviceType];
+                updatePriceEstimate();
             }
         });
     });
@@ -277,11 +311,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // ===== ОБРАБОТЧИКИ ИЗМЕНЕНИЯ МАСТЕРА/УСЛУГИ (АВТООБНОВЛЕНИЕ) =====
+    // При смене услуги – перерисовываем календарь и обновляем цену
     serviceSelect.addEventListener('change', () => {
-        if (selectedDateStr) loadSlotsForDate(selectedDateStr);
+        refreshCalendar();           // ← обновляем календарь
+        updatePriceEstimate();       // ← обновляем цену
     });
+
+    // При смене мастера – перерисовываем календарь
     masterSelect.addEventListener('change', () => {
-        if (selectedDateStr) loadSlotsForDate(selectedDateStr);
+        refreshCalendar();           // ← обновляем календарь
     });
 
     // Отправка формы бронирования
@@ -292,18 +331,26 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Пожалуйста, выберите дату и время.');
             return;
         }
+
+        const hairLength = hairLengthSlider ? parseInt(hairLengthSlider.value) : 30;
+        const hairDensity = hairDensitySelect ? parseInt(hairDensitySelect.value) : 0;
         const notes = notesInput.value.trim();
-        try {
+
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Пожалуйста, войдите в систему.');
             return;
         }
 
-        const response = await authFetch(`/appointments/${slotId}/book`, {
-            method: 'POST',
-            body: JSON.stringify({ notes })
-        });
+        try {
+            const response = await authFetch(`/appointments/${slotId}/book`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    notes: notes,
+                    hairLength: hairLength,
+                    hairDensity: hairDensity
+                })
+            });
 
             if (response.ok) {
                 const successDiv = document.getElementById('appointment-success');

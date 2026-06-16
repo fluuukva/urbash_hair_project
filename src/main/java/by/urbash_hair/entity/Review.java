@@ -1,7 +1,6 @@
 package by.urbash_hair.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,8 +32,7 @@ public class Review {
     @Column(name = "Дата")
     private String date;
 
-    @Column(name = "статус")
+    @Column(name = "Статус")   // <-- исправлено (было "статус")
     @Builder.Default
-    private String status = "PENDING";   // PENDING, APPROVED, REJECTED
-
+    private String status = "PENDING";
 }

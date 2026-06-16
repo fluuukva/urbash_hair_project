@@ -5,8 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-    @Table(name = "журнал_действий")
-
+@Table(name = "журнал_действий")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,23 +15,20 @@ public class AuditLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_журнала")
     private Long id;
 
     @Column(name = "id_Клиента")
-
     private Long userId;
 
-    @Column(name = "действие", nullable = false, length = 64)
-
+    @Column(name = "Действие", nullable = false, length = 64)
     private String action;
 
-    @Column(name = "детали_действия", length = 512)
-
+    @Column(name = "Детали_действия", length = 512)
     private String details;
 
     @Builder.Default
-    @Column(name = "дата_действия", nullable = false)
-
+    @Column(name = "Дата_действия", nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
     public AuditLog(Long userId, String action, String details) {

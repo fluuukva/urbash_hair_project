@@ -28,4 +28,8 @@ public class AppointmentRequest {
     
     @JsonProperty("clientId")
     private Long clientId;
+
+    // Новые поля для расчёта стоимости
+    private Integer hairLength;   // длина волос в см
+    private Integer hairDensity;  // густота в см (например, 6,7,8,9,10,12)
 }

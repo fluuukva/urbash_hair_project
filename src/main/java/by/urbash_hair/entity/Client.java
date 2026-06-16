@@ -42,26 +42,25 @@ public class Client {
     @Column(name = "Телефон")
     private String phone;
 
-    @Column(name = "зашифрованный_телефон", nullable = false, unique = true)
+    @Column(name = "Зашифрованный_телефон", nullable = false, unique = true)
     private String phoneHash;
 
-    @Column(name = "зашифрованный_email")
+    @Column(name = "Зашифрованный_email")
     private String emailHash;
 
     // Новые поля для двухфакторной аутентификации
-    @Column(name = "telegram_id")
+    @Column(name = "Telegram_id")
     private String telegramId;  // ID чата в Telegram или username
 
-    @Column(name = "способ_доставки_кода")
+    @Column(name = "Способ_доставки_кода")
     private String preferredDelivery; // "SMS", "EMAIL", "TELEGRAM"
 
     @Builder.Default
-    @Column(name = "согласие_на_обработку_данных")
+    @Column(name = "Согласие_на_обработку_данных")
     private Boolean dataProcessingConsent = false;
 
-    @Column(name = "дата_согласия")
+    @Column(name = "Дата_согласия")
     private LocalDateTime consentGivenAt;
-
 
     @OneToMany(mappedBy = "client")
     @JsonIgnoreProperties({"client"})

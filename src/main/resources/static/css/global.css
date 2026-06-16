@@ -48,3 +48,69 @@ body {
     padding-right: var(--page-padding-small-mobile);
   }
 }
+
+/* ФИКСЫ ДЛЯ ШАПКИ НА МОБИЛЬНЫХ */
+@media (max-width: 992px) {
+  .header-inline-menu {
+    display: none !important;
+  }
+  .main-nav .nav-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  .header__inner {
+    flex-wrap: nowrap !important;
+  }
+}
+/* ===== УМЕНЬШАЕМ ОТСТУП МЕЖДУ БАННЕРОМ И БЛОКОМ "О НАС" ===== */
+.hero-banner {
+  margin-bottom: -20px !important;
+  padding-bottom: 0 !important;
+}
+
+.about-us {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Дополнительно для мобильных – убираем лишние отступы у контейнеров */
+@media (max-width: 992px) {
+  .hero-banner {
+    padding-bottom: 5px !important;
+  }
+  .about-us {
+    padding-top: 5px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #header-user span {
+    display: none !important;
+  }
+  #header-user button {
+    display: inline-block !important;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    margin-bottom: 0 !important;
+    padding-bottom: 5px !important;
+  }
+  .about-us {
+    margin-top: 0 !important;
+    padding-top: 5px !important;
+  }
+}
+@media (max-width: 768px) {
+  .hero-banner {
+    margin-bottom: 0 !important;
+    padding-bottom: 5px !important;
+  }
+  .about-us {
+    margin-top: 0 !important;
+    padding-top: 5px !important;
+  }
+}

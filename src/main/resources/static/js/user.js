@@ -108,8 +108,12 @@ function openAuthModal() {
     document.getElementById('auth-fullname').value = '';
     document.getElementById('auth-email').value = '';
     document.getElementById('telegram-id').value = '';
-    document.getElementById('delivery-method').value = 'SMS';
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-telegram-id').value = '';
+    document.getElementById('delivery-method').value = 'EMAIL';
+    document.getElementById('login-delivery-method').value = 'EMAIL';
     document.getElementById('telegram-id-group').style.display = 'none';
+    document.getElementById('login-telegram-group').style.display = 'none';
     document.getElementById('auth-error').style.display = 'none';
 
     setAuthMode('register');
@@ -131,21 +135,34 @@ function setAuthMode(mode) {
     const titleEl = document.getElementById('auth-modal-title');
     const regFields = document.getElementById('registration-fields');
     const switchLink = document.getElementById('switch-auth-mode');
+    const registerFields = document.getElementById('register-fields');
+    const loginFields = document.getElementById('login-fields');
 
     if (mode === 'register') {
         titleEl.textContent = 'Регистрация';
         regFields.style.display = 'block';
+        if (registerFields) registerFields.style.display = 'block';
+        if (loginFields) loginFields.style.display = 'none';
         document.getElementById('auth-fullname').required = true;
+        document.getElementById('auth-phone').required = true;
         switchLink.textContent = 'Уже есть аккаунт? Войти';
+        document.getElementById('login-email').required = false;
+        document.getElementById('login-telegram-id').required = false;
     } else {
         titleEl.textContent = 'Вход';
-        regFields.style.display = 'none';
+        regFields.style.display = 'block';
+        if (registerFields) registerFields.style.display = 'none';
+        if (loginFields) loginFields.style.display = 'block';
         document.getElementById('auth-fullname').required = false;
+        document.getElementById('auth-phone').required = false;
         switchLink.textContent = 'Нет аккаунта? Зарегистрироваться';
+        document.getElementById('login-email').required = true;
+        document.getElementById('login-telegram-id').required = false;
     }
 }
 
 function initDeliveryMethodToggle() {
+    // Для регистрации
     const deliverySelect = document.getElementById('delivery-method');
     const telegramGroup = document.getElementById('telegram-id-group');
     if (deliverySelect) {
@@ -159,13 +176,48 @@ function initDeliveryMethodToggle() {
         if (deliverySelect.value === 'TELEGRAM') telegramGroup.style.display = 'block';
         else telegramGroup.style.display = 'none';
     }
+
+    // Для входа
+    const loginDeliverySelect = document.getElementById('login-delivery-method');
+    const loginTelegramGroup = document.getElementById('login-telegram-group');
+    if (loginDeliverySelect) {
+        loginDeliverySelect.addEventListener('change', () => {
+            if (loginDeliverySelect.value === 'TELEGRAM') {
+                loginTelegramGroup.style.display = 'block';
+                document.getElementById('login-telegram-id').required = true;
+                document.getElementById('login-email').required = false;
+            } else {
+                loginTelegramGroup.style.display = 'none';
+                document.getElementById('login-telegram-id').required = false;
+                document.getElementById('login-email').required = true;
+            }
+        });
+        if (loginDeliverySelect.value === 'TELEGRAM') {
+            loginTelegramGroup.style.display = 'block';
+            document.getElementById('login-telegram-id').required = true;
+            document.getElementById('login-email').required = false;
+        } else {
+            loginTelegramGroup.style.display = 'none';
+            document.getElementById('login-telegram-id').required = false;
+            document.getElementById('login-email').required = true;
+        }
+    }
 }
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ: добавлен параметр email
-async function sendCode(phone, deliveryMethod, telegramId, email) {
-    const payload = { phone, deliveryMethod };
-    if (telegramId) payload.telegramId = telegramId;
-    if (email) payload.email = email;  // передаём email на сервер
+async function sendCode(phone, deliveryMethod, telegramId, email, isLogin) {
+    const payload = { deliveryMethod };
+    if (isLogin) {
+        // Вход: отправляем email + опционально telegramId
+        if (!email) throw new Error('Укажите email');
+        payload.email = email;
+        if (telegramId) payload.telegramId = telegramId;
+    } else {
+        // Регистрация: отправляем телефон + опционально email/telegramId
+        if (!phone) throw new Error('Введите телефон');
+        payload.phone = phone;
+        if (telegramId) payload.telegramId = telegramId;
+        if (email) payload.email = email;
+    }
     const response = await fetch(`${API_BASE_URL}/auth/send-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -176,7 +228,10 @@ async function sendCode(phone, deliveryMethod, telegramId, email) {
 }
 
 async function verifyCode(phone, code, consentGiven, firstName, lastName, middleName, email, deliveryMethod, telegramId, preferredDelivery) {
-    const payload = { phone, code, consentGiven, deliveryMethod };
+    const payload = { phone, code, deliveryMethod };
+    if (consentGiven) {
+        payload.consentGiven = true;
+    }
     if (firstName) payload.firstName = firstName;
     if (lastName) payload.lastName = lastName;
     if (middleName) payload.middleName = middleName;
@@ -233,48 +288,62 @@ function initAuthModal() {
 
     if (sendCodeBtn) {
         sendCodeBtn.addEventListener('click', async () => {
-            const phoneInput = document.getElementById('auth-phone');
-            const phone = phoneInput.value.trim();
-            if (!phone) {
-                errorDiv.textContent = 'Введите номер телефона';
-                errorDiv.style.display = 'block';
-                return;
-            }
+            const deliveryMethod = currentAuthMode === 'register' 
+                ? document.getElementById('delivery-method').value 
+                : document.getElementById('login-delivery-method').value;
+            const isLogin = currentAuthMode === 'login';
+            let phone = null, email = null, telegramId = null;
 
-            if (currentAuthMode === 'register') {
+            if (isLogin) {
+                // Вход: проверяем email и, если выбран Telegram, telegramId
+                email = document.getElementById('login-email').value.trim();
+                if (!email) {
+                    errorDiv.textContent = 'Введите email';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                if (deliveryMethod === 'TELEGRAM') {
+                    telegramId = document.getElementById('login-telegram-id').value.trim();
+                    if (!telegramId) {
+                        errorDiv.textContent = 'Укажите Telegram username';
+                        errorDiv.style.display = 'block';
+                        return;
+                    }
+                }
+            } else {
+                // Регистрация: проверяем телефон
+                phone = document.getElementById('auth-phone').value.trim();
+                if (!phone) {
+                    errorDiv.textContent = 'Введите номер телефона';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
                 const fullname = document.getElementById('auth-fullname').value.trim();
                 if (!fullname) {
                     errorDiv.textContent = 'Введите ФИО';
                     errorDiv.style.display = 'block';
                     return;
                 }
-            }
-
-            const deliveryMethod = document.getElementById('delivery-method').value;
-            let telegramId = null;
-            if (deliveryMethod === 'TELEGRAM') {
-                telegramId = document.getElementById('telegram-id').value.trim();
-                if (!telegramId) {
-                    errorDiv.textContent = 'Укажите Telegram ID для получения кода';
-                    errorDiv.style.display = 'block';
-                    return;
-                }
-            }
-
-            // Получаем email из поля формы (для способа EMAIL)
-            let email = null;
-            if (deliveryMethod === 'EMAIL') {
-                email = document.getElementById('auth-email').value.trim();
-                if (!email) {
-                    errorDiv.textContent = 'Укажите email для получения кода';
-                    errorDiv.style.display = 'block';
-                    return;
+                if (deliveryMethod === 'TELEGRAM') {
+                    telegramId = document.getElementById('telegram-id').value.trim();
+                    if (!telegramId) {
+                        errorDiv.textContent = 'Укажите Telegram username';
+                        errorDiv.style.display = 'block';
+                        return;
+                    }
+                } else if (deliveryMethod === 'EMAIL') {
+                    email = document.getElementById('auth-email').value.trim();
+                    if (!email) {
+                        errorDiv.textContent = 'Укажите email';
+                        errorDiv.style.display = 'block';
+                        return;
+                    }
                 }
             }
 
             try {
                 errorDiv.style.display = 'none';
-                const result = await sendCode(phone, deliveryMethod, telegramId, email);
+                const result = await sendCode(phone, deliveryMethod, telegramId, email, isLogin);
                 alert(`Код отправлен (${deliveryMethod})! ${result}`);
                 document.getElementById('step-phone').style.display = 'none';
                 document.getElementById('step-code').style.display = 'block';
@@ -301,16 +370,9 @@ function initAuthModal() {
 
             const phone = document.getElementById('auth-phone').value.trim();
             const code = document.getElementById('auth-code').value.trim();
-            const consentCheckbox = document.getElementById('auth-consent');
 
             if (!code) {
                 errorDiv.textContent = 'Введите код';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            if (!consentCheckbox || !consentCheckbox.checked) {
-                errorDiv.textContent = 'Необходимо дать согласие на обработку персональных данных';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -321,6 +383,11 @@ function initAuthModal() {
                 let regFirstName = null, regLastName = null, regMiddleName = null, regEmail = null;
                 let telegramId = null;
                 let preferredDelivery = null;
+                let consentGiven = false;
+                let deliveryMethod = currentAuthMode === 'register' 
+                    ? document.getElementById('delivery-method').value 
+                    : document.getElementById('login-delivery-method').value;
+
                 if (currentAuthMode === 'register') {
                     const fullname = document.getElementById('auth-fullname').value.trim();
                     regEmail = document.getElementById('auth-email').value.trim() || null;
@@ -330,15 +397,28 @@ function initAuthModal() {
                         regFirstName = parts[1] || null;
                         regMiddleName = parts[2] || null;
                     }
-                    preferredDelivery = document.getElementById('delivery-method').value;
+                    preferredDelivery = deliveryMethod;
                     if (preferredDelivery === 'TELEGRAM') {
                         telegramId = document.getElementById('telegram-id').value.trim() || null;
                     }
+                    const consentCheckbox = document.getElementById('auth-consent');
+                    if (!consentCheckbox || !consentCheckbox.checked) {
+                        errorDiv.textContent = 'Необходимо дать согласие на обработку персональных данных';
+                        errorDiv.style.display = 'block';
+                        return;
+                    }
+                    consentGiven = true;
+                } else {
+                    // Вход: только email и telegramId (если выбран Telegram)
+                    regEmail = document.getElementById('login-email').value.trim() || null;
+                    if (deliveryMethod === 'TELEGRAM') {
+                        telegramId = document.getElementById('login-telegram-id').value.trim() || null;
+                    }
+                    consentGiven = false;
                 }
-                const deliveryMethod = document.getElementById('delivery-method').value;
 
                 const authResponse = await verifyCode(
-                    phone, code, true,
+                    phone, code, consentGiven,
                     regFirstName, regLastName, regMiddleName, regEmail,
                     deliveryMethod, telegramId, preferredDelivery
                 );

@@ -150,3 +150,44 @@
         bottom: 0;
     }
 }
+
+@media (max-width: 480px) {
+  .certificate-section-alt {
+    padding: 8px 10px !important;
+    position: relative;
+    overflow: hidden;
+  }
+  .certificate-section-alt__content {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .certificate-section-alt__image-certificate {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  .certificate-section-alt__text {
+    text-align: center;
+    padding: 0 10px;
+  }
+  .certificate-section-alt__text p {
+    font-size: clamp(13px, 2.8vw, 16px);
+    line-height: 1.5;
+    font-family: 'Montserrat', sans-serif;
+  }
+  /* ВОЗВРАЩАЕМ ЛИНИИ */
+  .certificate-section-alt__decorative-lines {
+    display: block !important; /* убираем display:none */
+    position: absolute;
+    bottom: -20px;
+    right: -50px;
+    width: 400px;
+    max-width: 80%;
+    height: auto;
+    opacity: 0.3;
+    z-index: 1;
+    pointer-events: none;
+  }
+}

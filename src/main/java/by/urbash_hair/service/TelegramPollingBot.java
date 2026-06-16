@@ -1,5 +1,6 @@
 package by.urbash_hair.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -20,6 +21,15 @@ public class TelegramPollingBot extends TelegramLongPollingBot {
 
     private final ConcurrentHashMap<String, Long> usernameToChatId = new ConcurrentHashMap<>();
 
+    @PostConstruct
+    public void init() {
+        System.out.println("========================================");
+        System.out.println("✅ Telegram бот запущен");
+        System.out.println("   Токен: " + botToken);
+        System.out.println("   Username бота: " + botUsername);
+        System.out.println("========================================");
+    }
+
     @Override
     public String getBotToken() {
         return botToken;
@@ -36,14 +46,19 @@ public class TelegramPollingBot extends TelegramLongPollingBot {
             Long chatId = update.getMessage().getChatId();
             String text = update.getMessage().getText();
             String username = update.getMessage().getFrom().getUserName();
+
+            System.out.println("📩 Получено сообщение от @" + username + " (chatId=" + chatId + "): " + text);
+
             if (username == null || username.isBlank()) {
                 sendMessage(chatId, "У вас не установлен username. Пожалуйста, установите его в настройках Telegram и повторите команду /start.");
                 return;
             }
+
             if ("/start".equals(text)) {
                 usernameToChatId.put("@" + username, chatId);
                 sendMessage(chatId, "✅ Ваш username @" + username + " сохранён. Теперь вы можете получать коды подтверждения на сайте.");
-                System.out.println("Сохранён пользователь: @" + username + " → " + chatId);
+                System.out.println("✅ Сохранён пользователь: @" + username + " → " + chatId);
+                System.out.println("📋 Текущая карта пользователей: " + usernameToChatId);
             }
         }
     }
@@ -54,7 +69,9 @@ public class TelegramPollingBot extends TelegramLongPollingBot {
         message.setText(text);
         try {
             execute(message);
+            System.out.println("✅ Сообщение отправлено в чат " + chatId);
         } catch (TelegramApiException e) {
+            System.err.println("❌ Ошибка отправки сообщения в чат " + chatId + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -64,6 +81,9 @@ public class TelegramPollingBot extends TelegramLongPollingBot {
     }
 
     public Long getChatIdByUsername(String username) {
-        return usernameToChatId.get(username);
+        Long chatId = usernameToChatId.get(username);
+        System.out.println("🔍 Поиск chatId для username: " + username + " → результат: " + chatId);
+        System.out.println("📋 Доступные username в карте: " + usernameToChatId.keySet());
+        return chatId;
     }
 }
