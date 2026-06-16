@@ -38,6 +38,5 @@ build/
 .DS_Store
 
 # Ignore local development config
-application-dev.yml
 application-prod.yml
 urbash.env
