@@ -6,16 +6,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
-      mode: update
+      mode: never   # <-- ИСПРАВЛЕНО: допустимые значения: always, embedded, never
   jpa:
     hibernate:
-      ddl-auto: validate   # проверяет схему, но не меняет
+      ddl-auto: update   # <-- это значение допустимо для ddl-auto
     show-sql: false
   mail:
     host: smtp.gmail.com
     port: 587
     username: ${MAIL_USERNAME:liza17semina@gmail.com}
-    password: ${MAIL_PASSWORD:ktypkbhhdrqhewbl}   # значение по умолчанию
+    password: ${MAIL_PASSWORD:ktypkbhhdrqhewbl}
     properties:
       mail:
         smtp:
