@@ -1,0 +1,58 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: update
+  jpa:
+    hibernate:
+      ddl-auto: validate   # проверяет схему, но не меняет
+    show-sql: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:liza17semina@gmail.com}
+    password: ${MAIL_PASSWORD:ktypkbhhdrqhewbl}   # значение по умолчанию
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN:8574229368:AAFJmVZ_QONCYCOpNZhJPW2aE4P3KYp-WhY}
+    username: ${TELEGRAM_BOT_USERNAME:urbash_hair_dev_bot}
+
+admin:
+  phone: ${ADMIN_PHONE:+375333737505}
+
+imagekit:
+  public-key: ${IMAGEKIT_PUBLIC_KEY:public_Q4B7yVRNKyfkBdkjpayJVqkJUyk=}
+  private-key: ${IMAGEKIT_PRIVATE_KEY:private_+N/4sJ1Dgdq6RX+1AYaSapNm96c=}
+  url-endpoint: ${IMAGEKIT_URL_ENDPOINT:https://ik.imagekit.io/3xkfdetno}
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD:MyJasyptP@ssw0rd!2024}
+
+app:
+  security:
+    phone-hash-salt: ${APP_PHONE_HASH_SALT:Urb@shH41rS@lt#}
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:UrbashHairJWTSecretKeyMustBeAtLeast32BytesLong!!}
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
