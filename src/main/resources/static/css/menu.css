@@ -113,14 +113,72 @@
   to { opacity: 1; }
 }
 
-/* ПЕРЕОПРЕДЕЛЕНИЕ КОНФЛИКТУЮЩИХ СТИЛЕЙ ИЗ HTML */
+/* ===== БУРГЕР — ВСЕГДА ВИДЕН ===== */
+.menu-toggle {
+  display: block !important;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.menu-toggle img {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+/* ===== ССЫЛКИ В ШАПКЕ — БЕЛЫЕ ===== */
+.header-inline-menu a {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.header-inline-menu a:hover {
+  color: #D0B004 !important;
+}
+
+/* ===== МЕНЮ — ВСЕГДА ВЕРТИКАЛЬНОЕ ===== */
+.main-nav .nav-list {
+  flex-direction: column !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+}
+
+/* ===== ПЕРЕОПРЕДЕЛЕНИЕ КОНФЛИКТУЮЩИХ СТИЛЕЙ ИЗ HTML ===== */
 @media (max-width: 992px) {
-  .main-nav .nav-list {
-    flex-direction: column !important;
-    gap: 0 !important;
-    align-items: stretch !important;
-  }
   .header-inline-menu {
     display: none !important;
   }
+}
+/* ===== БУРГЕР — ВСЕГДА ВИДЕН И РАБОТАЕТ ===== */
+.menu-toggle {
+    display: block !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.menu-toggle img {
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+
+/* ===== МЕНЮ — ВСЕГДА ВЕРТИКАЛЬНОЕ ===== */
+.main-nav .nav-list {
+    flex-direction: column !important;
+    gap: 0 !important;
+    align-items: stretch !important;
+}
+
+/* ===== СКРЫВАЕМ ЛИШНИЙ БЛОК ===== */
+.header-inline-menu {
+    display: none !important;
 }

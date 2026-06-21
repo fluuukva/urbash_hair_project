@@ -124,7 +124,11 @@ public class AdminApiController {
 
         case "job-applications":
             data = jobApplicationRepository.findAll().stream().map(j -> {
-                Client client = j.getApplicant() != null ? j.getApplicant().getClient() : null;
+                Client client = null;
+                if (j.getApplicant() != null && j.getApplicant().getClientId() != null) {
+                    client = clientRepository.findById(j.getApplicant().getClientId()).orElse(null);
+                }
+
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", j.getId());
                 map.put("fullName", fullName(client));

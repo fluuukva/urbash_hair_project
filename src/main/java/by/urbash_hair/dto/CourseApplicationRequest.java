@@ -8,9 +8,14 @@ public class CourseApplicationRequest {
     
     @JsonProperty("firstName")
     private String firstName;
-    
+
     @JsonProperty("lastName")
     private String lastName;
+
+    // Для work-with-us.html (форма "Работа") приходит поле name="Иванов Иван"
+    // поэтому поддерживаем алиас для восстановления ФИО.
+    @JsonProperty("name")
+    private String fullName;
     
     private String email;
     private String phone;
